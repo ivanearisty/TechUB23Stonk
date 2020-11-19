@@ -23,10 +23,12 @@ app = Flask(__name__)
 def index():
     return 'Index Page'
 
-# of percent change, returns date and returns column
+@app.route('/user/<username>')
+def show_user_profile(username):
+    return username
 
-
-@app.route('/CheckPercent')
+# of percent change, returns date and returns column, pretty self explanatory
+@app.route('/CheckPercent/<ticker>/<percent>')
 def check_percent(ticker, percent):
     df = (pd.DataFrame(TimeSeries(key='FDRKL7ONQ94G1OQB',
                                   output_format='pandas').get_daily_adjusted(ticker, outputsize='full')[0]))
@@ -35,9 +37,7 @@ def check_percent(ticker, percent):
     return df_sub[["% change"]].sort_index(ascending=False)
 
 # greater than a certain percent
-
-
-@app.route('/CheckPercentGreater')
+@app.route('/CheckPercentGreater/<ticker>/<percent>')
 def check_percent_greater(ticker, percent):
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
         ticker, outputsize='full')[0]
@@ -46,9 +46,7 @@ def check_percent_greater(ticker, percent):
     return df_sub[["returns"]].sort_index(ascending=False)
 
 # greater than a certain percent with a timeframe
-
-
-@app.route('/CheckPercentGreaterTimeframe')
+@app.route('/CheckPercentGreaterTimeframe/<ticker>/<percent>/<start_date>/<end_data>')
 def check_percent_greater_by_date(ticker, percent, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -60,9 +58,7 @@ def check_percent_greater_by_date(ticker, percent, start_date, end_date):
     return df_sub[["returns"]].sort_index(ascending=False)
 
 # greater than a certain percent with a timeframe and period
-
-
-@app.route('/CheckPercentGreaterTimeframePeriod')
+@app.route('/CheckPercentGreaterTimeframePeriod/<ticker>/<n>/<percent>/<start_date>/<end_data>')
 def check_percent_greater_by_date_timeframe(ticker, n, percent, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -77,7 +73,7 @@ def check_percent_greater_by_date_timeframe(ticker, n, percent, start_date, end_
 # certain margin around a stock  #all in percentages of 100
 
 
-@app.route('/CheckPercentChangeMargin')
+@app.route('/CheckPercentChangeMargin/<ticker>/<stock_return>/<margin>')
 def percent_change_margin(ticker, stock_return, margin):
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
         ticker, outputsize='full')[0]
@@ -91,7 +87,7 @@ def percent_change_margin(ticker, stock_return, margin):
 # certain margin around a stock with set start and end date and period (n) #all in percentages of 100
 
 
-@app.route('/CheckPercentChangeMarginTimeframePeriod')
+@app.route('/CheckPercentChangeMarginTimeframePeriod/<ticker>/<n>/<stock_return>/<margin>/<start_date>/<end_date>')
 def percent_change_margin_by_date_timeframe(ticker, n, stock_return, margin, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -107,7 +103,7 @@ def percent_change_margin_by_date_timeframe(ticker, n, stock_return, margin, sta
 # highest returns with n as amount of rows and timeframe
 
 
-@app.route('/CheckPercentTopReturns')
+@app.route('/CheckPercentTopReturns/<ticker>/<n>/<t>/<start_date>/<end_date>')
 def top_N_returns(ticker, n, t, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -121,7 +117,7 @@ def top_N_returns(ticker, n, t, start_date, end_date):
 # lowest returns with n as amount of rows and timeframe
 
 
-@app.route('/CheckPercentBottomReturns')
+@app.route('/CheckPercentBottomReturns/<ticker>/<n>/<t>/<start_date>/<end_date>')
 def bottom_N_returns(ticker, n, t, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -133,7 +129,7 @@ def bottom_N_returns(ticker, n, t, start_date, end_date):
     return df_sub[["returns"]].head(t)  # series of the returns
 
 # annualized returns, volatility, and sharpe over a certain timeframe
-@app.route('/ReturnsInfo')
+@app.route('/ReturnsInfo/<ticker>/<start_date>/<end_date>')
 def return_info(ticker, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(
         end_date), "start_date must eb less than end_date"  # make sure start date < end date
