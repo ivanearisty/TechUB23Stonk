@@ -27,14 +27,25 @@ def index():
 def show_user_profile(username):
     return username
 
+@app.route('/testingdict/<book>/<cars>')
+def dictionarybois(book, cars):
+    dictionarytest = {book:cars}
+    return dictionarytest
+
 # of percent change, returns date and returns column, pretty self explanatory
-@app.route('/CheckPercent/<ticker>/<percent>')
+@app.route('/CheckPercent/<ticker>/<int:percent>')
 def check_percent(ticker, percent):
     df = (pd.DataFrame(TimeSeries(key='FDRKL7ONQ94G1OQB',
                                   output_format='pandas').get_daily_adjusted(ticker, outputsize='full')[0]))
     df["% change"] = df["5. adjusted close"].pct_change()*100
     df_sub = df.loc[abs(df['% change']) >= percent, :]
-    return df_sub[["% change"]].sort_index(ascending=False)
+    finaldf = df_sub[["% change"]].sort_index(ascending=False)
+    prefinaldict = finaldf.to_dict()
+    finaldict = prefinaldict['% change']
+    a = {}
+    for i in finaldict:
+        a[str(i)] = finaldict[i]
+    return a
 
 # greater than a certain percent
 @app.route('/CheckPercentGreater/<ticker>/<percent>')
@@ -71,8 +82,6 @@ def check_percent_greater_by_date_timeframe(ticker, n, percent, start_date, end_
     return df_sub[["returns"]].sort_index(ascending=False)
 
 # certain margin around a stock  #all in percentages of 100
-
-
 @app.route('/CheckPercentChangeMargin/<ticker>/<stock_return>/<margin>')
 def percent_change_margin(ticker, stock_return, margin):
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -85,8 +94,6 @@ def percent_change_margin(ticker, stock_return, margin):
     return df_sub[["returns"]].sort_index()
 
 # certain margin around a stock with set start and end date and period (n) #all in percentages of 100
-
-
 @app.route('/CheckPercentChangeMarginTimeframePeriod/<ticker>/<n>/<stock_return>/<margin>/<start_date>/<end_date>')
 def percent_change_margin_by_date_timeframe(ticker, n, stock_return, margin, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
@@ -101,8 +108,6 @@ def percent_change_margin_by_date_timeframe(ticker, n, stock_return, margin, sta
     return df_sub[["returns"]].sort_index(ascending=False)
 
 # highest returns with n as amount of rows and timeframe
-
-
 @app.route('/CheckPercentTopReturns/<ticker>/<n>/<t>/<start_date>/<end_date>')
 def top_N_returns(ticker, n, t, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
@@ -115,8 +120,6 @@ def top_N_returns(ticker, n, t, start_date, end_date):
     return df_sub[["returns"]].head(t)  # series of the returns
 
 # lowest returns with n as amount of rows and timeframe
-
-
 @app.route('/CheckPercentBottomReturns/<ticker>/<n>/<t>/<start_date>/<end_date>')
 def bottom_N_returns(ticker, n, t, start_date, end_date):
     assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
