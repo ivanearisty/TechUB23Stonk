@@ -21,7 +21,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return 'Index Page'
+    return render_template('wired.html')
 
 @app.route('/testingdict/<book>/<cars>')
 def dictionarybois(book, cars):
@@ -41,7 +41,7 @@ def check_percent(ticker, percent):
     a = {}
     for i in finaldict:
         a[str(i)] = finaldict[i]
-    return 
+    return render_template('wired.html', a=a)
 
 # greater than a certain percent
 @app.route('/CheckPercentGreater/<ticker>/<percent>')
