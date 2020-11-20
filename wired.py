@@ -23,10 +23,6 @@ app = Flask(__name__)
 def index():
     return 'Index Page'
 
-@app.route('/user/<username>')
-def show_user_profile(username):
-    return username
-
 @app.route('/testingdict/<book>/<cars>')
 def dictionarybois(book, cars):
     dictionarytest = {book:cars}
