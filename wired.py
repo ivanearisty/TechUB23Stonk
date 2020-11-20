@@ -41,7 +41,7 @@ def check_percent(ticker, percent):
     a = {}
     for i in finaldict:
         a[str(i)] = finaldict[i]
-    return a
+    return 
 
 # greater than a certain percent
 @app.route('/CheckPercentGreater/<ticker>/<percent>')
