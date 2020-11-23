@@ -161,7 +161,7 @@ def bottom_N_returns(ticker, n, t, start_date, end_date):
     df = df.sort_index()
     df["returns"] = df["5. adjusted close"].pct_change(periods=n)*100
     df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_values(["returns"]
+    df_sub = df_sub.sort_values(["returns"])
     df_sub = df_sub[["returns"]].head(t).to_dict()  # series of the returns
     final_dict = df_sub['returns']
     a = {}
@@ -185,5 +185,5 @@ def return_info(ticker, start_date, end_date):
     mean_returns = df_sub.mean()*252
     # volatility is standard deviation of annualized returns*square root of 252, np is numpy library
     volatility = df_sub.std()*np.sqrt(252)
-    return pd.DataFrame({"Annualized Returns": [mean_returns], "Annualized Volatility": [volatility], "Annualized Sharpe": [mean_returns/volatility]})
+    return pd.DataFrame({"Annualized Returns": [mean_returns], "Annualized Volatility": [volatility], "Annualized Sharpe": [mean_returns/volatility]}).to_dict()
     
