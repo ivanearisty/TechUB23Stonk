@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NAME IN Tab</title> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<script type="text/javascript">
+
+//https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+var _table_ = document.createElement('table'),
+  _tr_ = document.createElement('tr'),
+  _th_ = document.createElement('th'),
+  _td_ = document.createElement('td');
+
+// Builds the HTML Table out of myList json data from Ivy restful service.
+function buildHtmlTable(arr) {
+  var table = _table_.cloneNode(false),
+    columns = addAllColumnHeaders(arr, table);
+  for (var i = 0, maxi = arr.length; i < maxi; ++i) {
+    var tr = _tr_.cloneNode(false);
+    for (var j = 0, maxj = columns.length; j < maxj; ++j) {
+      var td = _td_.cloneNode(false);
+      cellValue = arr[i][columns[j]];
+      td.appendChild(document.createTextNode(arr[i][columns[j]] || ''));
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  return table;
+}
+
+// Adds a header row to the table and returns the set of columns.
+// Need to do union of keys from all records as some records may not contain
+// all records
+function addAllColumnHeaders(arr, table) {
+  var columnSet = [],
+    tr = _tr_.cloneNode(false);
+  for (var i = 0, l = arr.length; i < l; i++) {
+    for (var key in arr[i]) {
+      if (arr[i].hasOwnProperty(key) && columnSet.indexOf(key) === -1) {
+        columnSet.push(key);
+        var th = _th_.cloneNode(false);
+        th.appendChild(document.createTextNode(key));
+        tr.appendChild(th);
+      }
+    }
+  }
+  table.appendChild(tr);
+  return columnSet;
+}
+
+
+function sendSubmit(postData) {
+  $.ajax({
+      url: "/response",
+      type: 'POST',
+      dataType: 'json',
+      async: false,
+      data: JSON.stringify(postData),
+      contentType: "application/json; charset=UTF-8"
+    })
+    .done(function(data) { // data will be here
+      document.body.appendChild(buildHtmlTable([data
+    
+]));
+      // alert(data['2020-03-11 00:00:00']);
+      return true;
+    })
+    .fail(function(err) {
+      return false;
+    })
+    .always(function(info) {
+      alert();
+      return "failed";
+    });
+  return true;
+};
+
+
+  function submit(){
+    var ticker = document.getElementById('ticker').value;
+    var percent = document.getElementById('percent').value;
+    sendSubmit(JSON.stringify({ticker: ticker, percent :percent})); //type : drop down cvalue 
+  }
+
+
+// how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
+//In html add a drop down to selct the mehtod. add value to json. Send to server. Server will look at this value in an iff statement and selct the correct method. "{"ttypekl": above"}. Then based on the tpye you will get the correct repsonse. This will be the data in the send sumbit. So used data variable and html json code 
+
+</script>
+<body>
+
+ <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-static-top">
+       <a class="navbar-brand">
+<span style="font-size: 100%;">Web tuitle</span>
+      </a>
+  <ul class="navbar-nav">
+<!--     <li class="nav-item">
+      <a class="nav-link" href="#">Link 1</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 2</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="#">Link 3</a>
+    </li> -->
+  </ul>
+</nav>
+<br>
+
+<div class="container-fluid">
+  <h3>content</h3>
+
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm">
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Percent</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="text" class="form-control" aria-label="Percent" id="percent" aria-describedby="inputGroup-sizing-sm">
+</div>
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<button type="button" class="btn btn-primary btn-sm" onclick="submit();">Submit</button>
+
+
+
+
+</div>
+
+</body>
+</html>

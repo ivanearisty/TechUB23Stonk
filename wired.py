@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify, abort
 import feedparser
 import random
 import time
@@ -12,7 +12,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import datetime as dt
 import requests
-
+import json
 project_root = os.path.dirname(__file__)
 template_path = os.path.join(project_root, './')
 
@@ -46,6 +46,7 @@ def check_percent(ticker, percent):
     for i in final_dict:
         a[str(i)] = final_dict[i]
     return a
+
 
 # greater than a certain percent 
 @app.route('/CheckPercentGreater/<ticker>/<float:percent>')# works
