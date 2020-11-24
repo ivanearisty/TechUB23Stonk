@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>NAME IN Tab</title> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+    <style>
+        th, td, p, input, h3 {
+            font:15px 'Segoe UI';
+        }
+        table, th, td {
+            border: solid 1px #ddd;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+    </style>
+
+<script type="text/javascript">
+
+//https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+
+function tableFromJson(data) {
+    var col = [];
+    for (var i = 0; i < data.length; i++) {
+        for (var key in data[i]) {
+            if (col.indexOf(key) === -1) {
+                col.push(key);
+            }
+        }
+    }
+
+    // Create a table.
+    var table = document.createElement("table");
+
+    // Create table header row using the extracted headers above.
+    var tr = table.insertRow(-1);                   // table row.
+
+    for (var i = 0; i < col.length; i++) {
+        var th = document.createElement("th");      // table header.
+        th.innerHTML = col[i];
+        tr.appendChild(th);
+    }
+
+    // add json data to the table as rows.
+    for (var i = 0; i < data.length; i++) {
+
+        tr = table.insertRow(-1);
+
+        for (var j = 0; j < col.length; j++) {
+            var tabCell = tr.insertCell(-1);
+            tabCell.innerHTML = data[i][col[j]];
+        }
+    }
+
+    // Now, add the newly created table with json data, to a container.
+    var divShowData = document.getElementById('showData');
+    divShowData.innerHTML = "";
+    divShowData.appendChild(table);
+
+}
+    
+    
+
+
+function sendSubmit(postData) {
+  $.ajax({
+      url: "/marginData", //Change 
+      type: 'POST',
+      dataType: 'json',
+      async: false,
+      data: JSON.stringify(postData),
+      contentType: "application/json; charset=UTF-8"
+    })
+    .done(function(data) { // data will be here
+        tableFromJson(data);
+      // alert(data['2020-03-11 00:00:00']);
+      return true;
+    })
+    .fail(function(err) {
+      return false;
+    })
+    .always(function(info) {
+      // alert();
+      return "failed";
+    });
+  return true;
+};
+
+
+  function submit(){
+    var ticker = document.getElementById('ticker').value;
+    var percent = document.getElementById('percent').value;
+    var margin = document.getElementById('margin').value;
+    if (ticker == null){
+      alert("Please enter text");
+      return;
+    }
+    if (percent == null){
+      alert("Please enter text");
+      return;
+    }   
+    if (margin == null){
+      alert("Please enter text");
+      return;
+    }   
+    sendSubmit(JSON.stringify({ticker: ticker, percent :percent, margin:margin})); //type : drop down cvalue 
+  }
+
+
+// how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
+//In html add a drop down to selct the mehtod. add value to json. Send to server. Server will look at this value in an iff statement and selct the correct method. "{"ttypekl": above"}. Then based on the tpye you will get the correct repsonse. This will be the data in the send sumbit. So used data variable and html json code 
+
+</script>
+<body>
+
+ <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-static-top">
+       <a class="navbar-brand">
+<span style="font-size: 100%;">Web title</span>
+      </a>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" href="/">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" class='active-page' href="/greaterthan">Greater Than</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/margin">Margin</a>
+    </li>
+  </ul>
+</nav>
+<br>
+
+<div class="container-fluid">
+
+
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+<h4>Margin function</h4>
+<h5>Directiopn</h5>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Percent</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Percent" id="percent" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Margin</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Margin" id="margin" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
+<br>  
+<br>
+<p id='showData'></p>
+
+
+
+
+</div>
+
+</body>
+</html>
