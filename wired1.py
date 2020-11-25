@@ -30,7 +30,11 @@ def margin():
 
 @app.route('/greaterthan')
 def greaterthan():
-    return render_template('greaterthan.html', name="/")    
+    return render_template('greaterthan.html', name="/")
+
+@app.route('/lessthan')
+def lessthan():
+    return render_template('lessthan.html', name="/")    
 
     return dictionarytest
 
@@ -43,12 +47,60 @@ def greater_than_data(name=""):
         print(json_data)
         print(type(json_data))
         json_data = json.loads(json_data) # convert string to json
-        response_date = check_percent_greater_new(json_data["ticker"], float(json_data["percent"]))
-        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent": round(value ,2)}  for date, value in response_date.items()] 
+        response_date = check_percent_greater_by_date_timeframe(json_data["ticker"], int(json_data["interval"]), float(json_data["percent_change"]), json_data["start_date"], json_data["end_date"])
+        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
         return jsonify(response_date_formated)
     else:
         abort(404)
 
+# greater than a certain percent within a timeframe and period n 
+#@app.route('/CheckPercentGreaterTimeframePeriod/<ticker>/<int:n>/<float:percent_change>/<start_date>/<end_date>') # works
+def check_percent_greater_by_date_timeframe(ticker, interval, percent_change, start_date, end_date):
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
+    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
+        ticker, outputsize='full')[0]
+    df = df.sort_index()
+    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
+    df_sub = df.loc[start_date:end_date]
+    df_sub = df_sub.loc[(df['returns']) >= percent_change, :]
+    # return df_sub[["returns"]].sort_index()
+    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
+    final_dict = df_sub['returns']
+    a = {}
+    for i in final_dict:
+        a[str(i)] = final_dict[i]
+    return a
+
+@app.route('/lessthanData', methods=["GET", "POST"])
+def less_than_data(name=""):
+    if request.method == "POST":
+        json_data = request.get_json(force=True) 
+        print(json_data)
+        print(type(json_data))
+        json_data = json.loads(json_data) # convert string to json
+        response_date = check_percent_less_by_date_timeframe(json_data["ticker"], int(json_data["interval"]), float(json_data["percent_change"]), json_data["start_date"], json_data["end_date"])
+        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
+        return jsonify(response_date_formated)
+    else:
+        abort(404)
+
+# greater than a certain percent within a timeframe and period n 
+#@app.route('/CheckPercentLessTimeframePeriod/<ticker>/<int:n>/<float:percent_change>/<start_date>/<end_date>') # works
+def check_percent_less_by_date_timeframe(ticker, interval, percent_change, start_date, end_date):
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
+    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
+        ticker, outputsize='full')[0]
+    df = df.sort_index()
+    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
+    df_sub = df.loc[start_date:end_date]
+    df_sub = df_sub.loc[(df['returns']) <= percent_change, :]
+    # return df_sub[["returns"]].sort_index()
+    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
+    final_dict = df_sub['returns']
+    a = {}
+    for i in final_dict:
+        a[str(i)] = final_dict[i]
+    return a
 
 @app.route('/marginData', methods=["GET", "POST"])
 def margin_data(name=""):
@@ -57,27 +109,31 @@ def margin_data(name=""):
         print(json_data) # just a dict
         print(type(json_data))
         json_data = json.loads(json_data) # convert string to json
-        response_date = percent_change_margin_new(json_data["ticker"], float(json_data["percent"]),  float(json_data["margin"]))
-        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent": round(value ,2)}  for date, value in response_date.items()] 
+        response_date = percent_change_margin_by_date_timeframe(json_data["ticker"], int(json_data["interval"]), float(json_data["percent_change"]),  float(json_data["margin"]), json_data["start_date"], json_data["end_date"])
+        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
         return jsonify(response_date_formated)
     else:
         abort(404)
 
-
-
-def check_percent_greater_new(ticker, percent):
-    print(ticker, percent)
+# certain margin around a stock within a timeframe and period n 
+#@app.route('/CheckPercentChangeMarginTimeframePeriod/<ticker>/<int:n>/<float:percent_change>/<float:margin>/<start_date>/<end_date>') # works
+def percent_change_margin_by_date_timeframe(ticker, interval, percent_change, margin, start_date, end_date):
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
         ticker, outputsize='full')[0]
-    df["returns"] = df["5. adjusted close"].pct_change()*100
-    df_sub = df.loc[(df['returns']) >= percent, :]
-    df_sub = df_sub[["returns"]].sort_index(ascending=False)
-    df_sub = df_sub.to_dict()
+    df = df.sort_index()
+    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
+    df_sub = df.loc[start_date:end_date]
+    df_sub = df_sub[(df["returns"] < percent_change+margin) &
+                    (df["returns"] > percent_change-margin)]  # defining returns you want
+    # sort values by date  #sort_values(["returns"])
+    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
     final_dict = df_sub['returns']
     a = {}
     for i in final_dict:
         a[str(i)] = final_dict[i]
     return a
+
 
 def percent_change_margin_new(ticker, stock_return, margin):
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -127,23 +183,7 @@ def check_percent_greater_by_date(ticker, percent, start_date, end_date):
         a[str(i)] = final_dict[i]
     return a
 
-# greater than a certain percent within a timeframe and period n 
-@app.route('/CheckPercentGreaterTimeframePeriod/<ticker>/<int:n>/<float:percent>/<start_date>/<end_date>') # works
-def check_percent_greater_by_date_timeframe(ticker, n, percent, start_date, end_date):
-    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
-    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]
-    df = df.sort_index()
-    df["returns"] = df["5. adjusted close"].pct_change(periods=n)*100
-    df_sub = df.loc[start_date:end_date]
-    df_sub = df_sub.loc[(df['returns']) >= percent, :]
-    # return df_sub[["returns"]].sort_index()
-    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
-    final_dict = df_sub['returns']
-    a = {}
-    for i in final_dict:
-        a[str(i)] = final_dict[i]
-    return a
+
 
 # certain margin around a stock  
 @app.route('/CheckPercentChangeMargin/<ticker>/<float:stock_return>/<float:margin>') # works
@@ -161,25 +201,6 @@ def percent_change_margin(ticker, stock_return, margin):
         a[str(i)] = final_dict[i]
     return a
     
-
-# certain margin around a stock within a timeframe and period n 
-@app.route('/CheckPercentChangeMarginTimeframePeriod/<ticker>/<int:n>/<float:stock_return>/<float:margin>/<start_date>/<end_date>') # works
-def percent_change_margin_by_date_timeframe(ticker, n, stock_return, margin, start_date, end_date):
-    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
-    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]
-    df = df.sort_index()
-    df["returns"] = df["5. adjusted close"].pct_change(periods=n)*100
-    df_sub = df.loc[start_date:end_date]
-    df_sub = df_sub[(df["returns"] < stock_return+margin) &
-                    (df["returns"] > stock_return-margin)]  # defining returns you want
-    # sort values by date  #sort_values(["returns"])
-    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
-    final_dict = df_sub['returns']
-    a = {}
-    for i in final_dict:
-        a[str(i)] = final_dict[i]
-    return a
 
 
 # highest returns t within a certain timeframe over a period n 
