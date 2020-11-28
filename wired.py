@@ -38,23 +38,26 @@ def check_percent(ticker, percent):
     df_sub = df.loc[abs(df['% change']) >= percent, :]
     finaldf = df_sub[["% change"]].sort_index(ascending=False)
     prefinaldict = finaldf.to_dict()
-    finaldict = prefinaldict['% change']
-    a = finaldict
+    a = prefinaldict['% change']
     #a = {}
     #for i in finaldict:
     #    a[str(i)] = finaldict[i]
     return render_template('base.html', a=a) 
     # format of a is JSON, passing through a as a
-    # a = {string:}
 
 # greater than a certain percent
 @app.route('/CheckPercentGreater/<ticker>/<percent>')
 def check_percent_greater(ticker, percent):
-    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]
+    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(ticker, outputsize='full')[0]
     df["returns"] = df["5. adjusted close"].pct_change()*100
     df_sub = df.loc[(df['returns']) >= percent, :]
-    return df_sub[["returns"]].sort_index(ascending=False)
+    df_sub[["returns"]].sort_index(ascending=False)
+    finaldf = df_sub[["returns"]].sort_index(ascending=False)
+    prefinaldict = finaldf.to_dict()
+    b = prefinaldict['returns']
+    return render_template('sample.html', b=b)
+    # format of b is JSON, passing through b as b
+    # sample.html is a placeholder, should switched for whichver html is used for formatting
 
 # greater than a certain percent with a timeframe
 @app.route('/CheckPercentGreaterTimeframe/<ticker>/<percent>/<start_date>/<end_data>')
@@ -66,7 +69,13 @@ def check_percent_greater_by_date(ticker, percent, start_date, end_date):
     df["returns"] = df["5. adjusted close"].pct_change()*100
     df_sub = df.loc[start_date:end_date]
     df_sub = df_sub.loc[(df['returns']) >= percent, :]
-    return df_sub[["returns"]].sort_index(ascending=False)
+    finaldf = df_sub[["returns"]].sort_index(ascending=False)
+    prefinaldict = finaldf.to_dict()
+    finaldict = prefinaldict['returns']
+    c = finaldict
+    return render_template('sample.html', c=c)
+    # format of c is JSON, passing through c as c
+    # sample.html is a placeholder, should switched for whichver html is used for formatting
 
 # greater than a certain percent with a timeframe and period
 @app.route('/CheckPercentGreaterTimeframePeriod/<ticker>/<n>/<percent>/<start_date>/<end_data>')
@@ -78,8 +87,14 @@ def check_percent_greater_by_date_timeframe(ticker, n, percent, start_date, end_
     df["returns"] = df["5. adjusted close"].pct_change(periods=n)*100
     df_sub = df.loc[start_date:end_date]
     df_sub = df_sub.loc[(df['returns']) >= percent, :]
-    # return df_sub[["returns"]].sort_index()
-    return df_sub[["returns"]].sort_index(ascending=False)
+    finaldf = df_sub[["returns"]].sort_index(ascending=False)
+    prefinaldict = finaldf.to_dict()
+    finaldict = prefinaldict['returns']
+    d = finaldict
+    return render_template('sample.html', d=d)
+    # format of d is JSON, passing through d as d
+    # sample.html is a placeholder, should switched for whichver html is used for formatting
+
 
 # certain margin around a stock  #all in percentages of 100
 @app.route('/CheckPercentChangeMargin/<ticker>/<stock_return>/<margin>')
