@@ -34,7 +34,15 @@ def greaterthan():
 
 @app.route('/lessthan')
 def lessthan():
-    return render_template('lessthan.html', name="/")    
+    return render_template('lessthan.html', name="/")  
+
+@app.route('/topreturns')
+def topreturns():
+    return render_template('topreturns.html', name="/")  
+
+@app.route('/bottomreturns')
+def bottomreturns():
+    return render_template('bottomreturns.html', name="/")  
 
     return dictionarytest
 
@@ -134,6 +142,67 @@ def percent_change_margin_by_date_timeframe(ticker, interval, percent_change, ma
         a[str(i)] = final_dict[i]
     return a
 
+@app.route('/topreturnsData', methods=["GET", "POST"])
+def top_returns_data(name=""):
+    if request.method == "POST":
+        json_data = request.get_json(force=True) 
+        print(json_data) # just a dict
+        print(type(json_data))
+        json_data = json.loads(json_data) # convert string to json
+        response_date = top_N_returns(json_data["ticker"], int(json_data["interval"]), int(json_data["number_of_returns"]), json_data["start_date"], json_data["end_date"])
+        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
+        return jsonify(response_date_formated)
+    else:
+        abort(404)
+
+# highest returns within a certain timeframe over a certain interval
+#@app.route('/CheckPercentTopReturns/<ticker>/<int:n>/<int:t>/<start_date>/<end_date>')
+def top_N_returns(ticker, interval, number_of_returns, start_date, end_date):
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
+    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
+        ticker, outputsize='full')[0]
+    df = df.sort_index()
+    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
+    df_sub = df.loc[start_date:end_date]  # slice of date frame
+    df_sub = df_sub.sort_values(["returns"], ascending=False)
+    df_sub = df_sub[["returns"]].head(number_of_returns).to_dict() # series of the returns 
+    final_dict = df_sub['returns']
+    a = {}
+    for i in final_dict:
+        a[str(i)] = final_dict[i]
+    return a
+
+@app.route('/bottomreturnsData', methods=["GET", "POST"])
+def bottom_returns_data(name=""):
+    if request.method == "POST":
+        json_data = request.get_json(force=True) 
+        print(json_data) # just a dict
+        print(type(json_data))
+        json_data = json.loads(json_data) # convert string to json
+        response_date = bottom_N_returns(json_data["ticker"], int(json_data["interval"]), int(json_data["number_of_returns"]), json_data["start_date"], json_data["end_date"])
+        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
+        return jsonify(response_date_formated)
+    else:
+        abort(404)
+
+
+# lowest returns within a certain timeframe over a certain interval
+#@app.route('/CheckPercentBottomReturns/<ticker>/<int:n>/<int:t>/<start_date>/<end_date>')
+def bottom_N_returns(ticker, interval, number_of_returns, start_date, end_date):
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
+    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
+        ticker, outputsize='full')[0]
+    df = df.sort_index()
+    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
+    df_sub = df.loc[start_date:end_date]  # slice of date frame
+    df_sub = df_sub.sort_values(["returns"])
+    df_sub = df_sub[["returns"]].head(number_of_returns).to_dict()  # series of the returns
+    final_dict = df_sub['returns']
+    a = {}
+    for i in final_dict:
+        a[str(i)] = final_dict[i]
+    return a
+
 
 def percent_change_margin_new(ticker, stock_return, margin):
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -203,39 +272,9 @@ def percent_change_margin(ticker, stock_return, margin):
     
 
 
-# highest returns t within a certain timeframe over a period n 
-@app.route('/CheckPercentTopReturns/<ticker>/<int:n>/<int:t>/<start_date>/<end_date>')
-def top_N_returns(ticker, n, t, start_date, end_date):
-    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
-    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]
-    df = df.sort_index()
-    df["returns"] = df["5. adjusted close"].pct_change(periods=n)*100
-    df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_values(["returns"], ascending=False)
-    df_sub = df_sub[["returns"]].head(t).to_dict() # series of the returns 
-    final_dict = df_sub['returns']
-    a = {}
-    for i in final_dict:
-        a[str(i)] = final_dict[i]
-    return a
 
-# lowest returns t within a certain timeframe over a given period n 
-@app.route('/CheckPercentBottomReturns/<ticker>/<int:n>/<int:t>/<start_date>/<end_date>')
-def bottom_N_returns(ticker, n, t, start_date, end_date):
-    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
-    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]
-    df = df.sort_index()
-    df["returns"] = df["5. adjusted close"].pct_change(periods=n)*100
-    df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_values(["returns"])
-    df_sub = df_sub[["returns"]].head(t).to_dict()  # series of the returns
-    final_dict = df_sub['returns']
-    a = {}
-    for i in final_dict:
-        a[str(i)] = final_dict[i]
-    return a
+
+
 
 # annualized returns, volatility, and sharpe over a certain timeframe
 @app.route('/ReturnsInfo/<ticker>/<start_date>/<end_date>')

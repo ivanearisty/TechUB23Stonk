@@ -74,7 +74,7 @@ function tableFromJson(data) {
 
 function sendSubmit(postData) {
   $.ajax({
-      url: "/lessthanData", //Change 
+      url: "/topreturnsData", //Change 
       type: 'POST',
       dataType: 'json',
       async: false,
@@ -100,7 +100,7 @@ function sendSubmit(postData) {
   function submit(){
     var ticker = document.getElementById('ticker').value;
     var interval = document.getElementById('interval').value;
-    var percent_change = document.getElementById('percent_change').value;
+    var number_of_returns = document.getElementById('number_of_returns').value;
     var start_date = document.getElementById('start_date').value;
     var end_date = document.getElementById('end_date').value;
     if (ticker == null){
@@ -111,7 +111,7 @@ function sendSubmit(postData) {
       alert("Please enter text");
       return;
     }
-    if (percent_change == null){
+    if (number_of_returns == null){
       alert("Please enter text");
       return;
     } 
@@ -123,7 +123,7 @@ function sendSubmit(postData) {
       alert("Please enter text");
       return;
     } 
-    sendSubmit(JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
+    sendSubmit(JSON.stringify({ticker: ticker, interval: interval, number_of_returns: number_of_returns, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
   }
 
 
@@ -153,9 +153,6 @@ function sendSubmit(postData) {
     <li class="nav-item">
       <a class="nav-link" class='active-page' href="/topreturns">Top Returns</a>
     </li>
-     <li class="nav-item">
-      <a class="nav-link" class='active-page' href="/bottomreturns">Bottom Returns</a>
-    </li>
   </ul>
 </nav>
 <br>
@@ -164,7 +161,7 @@ function sendSubmit(postData) {
 
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Less Than Function</h2>
+<h2>Top Returns Function</h2>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -181,10 +178,10 @@ function sendSubmit(postData) {
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
   </div>
   <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
