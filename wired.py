@@ -14,20 +14,21 @@ import datetime as dt
 import requests
 
 project_root = os.path.dirname(__file__)
-template_path = os.path.join(project_root, './')
+template_path = os.path.join(project_root, './templates/')
 
 app = Flask(__name__)
 
 
-@app.route('/')
-def index():
-    return 'Index Page'
+@app.route('/<name>')
+def index(name):
+    return render_template('base.html',name=name)
 
+'''
 @app.route('/testingdict/<book>/<cars>')
 def dictionarybois(book, cars):
     dictionarytest = {book:cars}
     return dictionarytest
-
+'''
 # of percent change, returns date and returns column, pretty self explanatory
 @app.route('/CheckPercent/<ticker>/<int:percent>')
 def check_percent(ticker, percent):
@@ -38,10 +39,13 @@ def check_percent(ticker, percent):
     finaldf = df_sub[["% change"]].sort_index(ascending=False)
     prefinaldict = finaldf.to_dict()
     finaldict = prefinaldict['% change']
-    a = {}
-    for i in finaldict:
-        a[str(i)] = finaldict[i]
-    return 
+    a = finaldict
+    #a = {}
+    #for i in finaldict:
+    #    a[str(i)] = finaldict[i]
+    return render_template('base.html', a=a) 
+    # format of a is JSON, passing through a as a
+    # a = {string:}
 
 # greater than a certain percent
 @app.route('/CheckPercentGreater/<ticker>/<percent>')
