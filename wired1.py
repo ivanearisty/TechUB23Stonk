@@ -215,7 +215,7 @@ def sharpe_data(name=""):
         print(type(json_data))
         json_data = json.loads(json_data) # convert string to json
         response_date = return_info(json_data["ticker"], float(json_data["risk_free_rate"]), json_data["start_date"], json_data["end_date"])
-        response_date_formated = [{"Statistic":label, "Value": JSON.stringify(value)}  for label, value in response_date.items()] 
+        response_date_formated = [{"Statistic":label, "Value": value}  for label, value in response_date.items()] 
         return jsonify(response_date_formated)
     else:
         abort(404)
