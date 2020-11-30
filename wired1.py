@@ -44,6 +44,10 @@ def topreturns():
 def bottomreturns():
     return render_template('bottomreturns.html', name="/")  
 
+@app.route('/sharpe')
+def sharpe():
+    return render_template('sharpe.html', name="/")  
+
     return dictionarytest
 
 
@@ -203,6 +207,42 @@ def bottom_N_returns(ticker, interval, number_of_returns, start_date, end_date):
         a[str(i)] = final_dict[i]
     return a
 
+@app.route('/sharpeData', methods=["GET", "POST"])
+def sharpe_data(name=""):
+    if request.method == "POST":
+        json_data = request.get_json(force=True) 
+        print(json_data) # just a dict
+        print(type(json_data))
+        json_data = json.loads(json_data) # convert string to json
+        response_date = return_info(json_data["ticker"], float(json_data["risk_free_rate"]), json_data["start_date"], json_data["end_date"])
+        #response_date_formated = [{"Annualized Returns":returns, "Annualized Sharpe": value}  for returns, value in response_date.items()] 
+        return jsonify(response_date_formated)
+    else:
+        abort(404)
+
+# annualized returns, volatility, and sharpe over a certain timeframe
+#@app.route('/ReturnsInfo/<ticker>/<start_date>/<end_date>')
+def return_info(ticker, risk_free_rate, start_date, end_date):
+    assert pd.to_datetime(start_date) < pd.to_datetime(
+        end_date), "start_date must eb less than end_date"  # make sure start date < end date
+    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
+        ticker, outputsize='full')[0]  # 1st input of list
+    df = df.sort_index()  # sort based on date
+    df["returns"] = df["5. adjusted close"].pct_change() * 100  # get percentage change
+    df = df.dropna(subset=["returns"])  # drop NA values
+    df_sub = df.loc[start_date:end_date]  # slice of date frame
+    df_sub = df_sub["returns"]  # series of the returns
+    # annulizing number of trading days in a year. average daily return*252. risk free rate of 3%
+    mean_returns = round((df_sub.mean()*252), 2)
+    risk_free = risk_free_rate
+    # volatility is standard deviation of annualized returns*square root of 252, np is numpy library
+    volatility = round(df_sub.std()*np.sqrt(252), 2)
+    final_dict = pd.DataFrame({"Annualized Returns": [mean_returns], "Annualized Volatility": [volatility], "Annualized Sharpe": [(mean_returns-risk_free)/volatility]}).to_dict()
+    a = {}
+    for i in final_dict:
+        a[str(i)] = final_dict[i]
+    return a
+
 
 def percent_change_margin_new(ticker, stock_return, margin):
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -276,23 +316,7 @@ def percent_change_margin(ticker, stock_return, margin):
 
 
 
-# annualized returns, volatility, and sharpe over a certain timeframe
-@app.route('/ReturnsInfo/<ticker>/<start_date>/<end_date>')
-def return_info(ticker, start_date, end_date):
-    assert pd.to_datetime(start_date) < pd.to_datetime(
-        end_date), "start_date must eb less than end_date"  # make sure start date < end date
-    df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]  # 1st input of list
-    df = df.sort_index()  # sort based on date
-    df["returns"] = df["5. adjusted close"].pct_change() * 100  # get percentage change
-    df = df.dropna(subset=["returns"])  # drop NA values
-    df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub["returns"]  # series of the returns
-    # annulizing number of trading days in a year. average daily return*252
-    mean_returns = df_sub.mean()*252
-    # volatility is standard deviation of annualized returns*square root of 252, np is numpy library
-    volatility = df_sub.std()*np.sqrt(252)
-    return pd.DataFrame({"Annualized Returns": [mean_returns], "Annualized Volatility": [volatility], "Annualized Sharpe": [mean_returns/volatility]}).to_dict()
+
     
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, debug=True)

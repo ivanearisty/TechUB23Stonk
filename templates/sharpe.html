@@ -74,7 +74,7 @@ function tableFromJson(data) {
 
 function sendSubmit(postData) {
   $.ajax({
-      url: "/marginData", //Change 
+      url: "/sharpeData", //Change 
       type: 'POST',
       dataType: 'json',
       async: false,
@@ -99,24 +99,14 @@ function sendSubmit(postData) {
 
   function submit(){
     var ticker = document.getElementById('ticker').value;
-    var interval = document.getElementById('interval').value;
-    var percent_change = document.getElementById('percent_change').value;
-    var margin = document.getElementById('margin').value;
+    var risk_free_rate = document.getElementById('risk_free_rate').value;
     var start_date = document.getElementById('start_date').value;
     var end_date = document.getElementById('end_date').value;
     if (ticker == null){
       alert("Please enter text");
       return;
     }
-    if (interval == null){
-      alert("Please enter text");
-      return;
-    }
-    if (percent_change == null){
-      alert("Please enter text");
-      return;
-    }   
-    if (margin == null){
+    if (risk_free_rate == null){
       alert("Please enter text");
       return;
     }
@@ -127,8 +117,8 @@ function sendSubmit(postData) {
     if (end_date == null){
       alert("Please enter text");
       return;
-    }    
-    sendSubmit(JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, margin: margin, start_date: start_date, end_date: end_date})); //type : drop down value 
+    } 
+    sendSubmit(JSON.stringify({ticker: ticker, risk_free_rate: risk_free_rate, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
   }
 
 
@@ -155,7 +145,7 @@ function sendSubmit(postData) {
     <li class="nav-item">
       <a class="nav-link" class='active-page' href="/margin">Margin</a>
     </li>
-    <li class="nav-item">
+   <li class="nav-item">
       <a class="nav-link" class='active-page' href="/topreturns">Top Returns</a>
     </li>
     <li class="nav-item">
@@ -172,7 +162,7 @@ function sendSubmit(postData) {
 
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Margin Function</h2>
+<h2>Annualized Sharpe Ratio Function</h2>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -182,25 +172,9 @@ function sendSubmit(postData) {
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+    <span class="input-group-text" id="inputGroup-sizing-sm">Risk Free Rate</span>
   </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
-  </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Margin</span>
-  </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Margin" id="margin" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Risk Free Rate" id="risk_free_rate" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -216,7 +190,6 @@ function sendSubmit(postData) {
   </div>
   <input type="Date" class="form-control" aria-label="End Date" id="end_date" aria-describedby="inputGroup-sizing-sm" required>
 </div>
-
 <!-- drop down in html to select function -->
 <!-- onclick caklls js submit -->
 <br>
