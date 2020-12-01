@@ -52,16 +52,16 @@ def sharpe():
 
 
 
-@app.route('/greaterthanData', methods=["GET", "POST"])
+@app.route('/greaterthanData', methods=["GET", "POST"]) #flask documentation get request 
 def greater_than_data(name=""):
     if request.method == "POST":
-        json_data = request.get_json(force=True) 
+        json_data = request.get_json(force=True) #parses the json request 
         print(json_data)
         print(type(json_data))
-        json_data = json.loads(json_data) # convert string to json
+        json_data = json.loads(json_data) #convert json data into python objects
         response_date = check_percent_greater_by_date_timeframe(json_data["ticker"], int(json_data["interval"]), float(json_data["percent_change"]), json_data["start_date"], json_data["end_date"])
         response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
-        return jsonify(response_date_formated)
+        return jsonify(response_date_formated) #json representation of the arguments 
     else:
         abort(404)
 
@@ -176,16 +176,16 @@ def top_N_returns(ticker, interval, number_of_returns, start_date, end_date):
         a[str(i)] = final_dict[i]
     return a
 
-@app.route('/bottomreturnsData', methods=["GET", "POST"])
+@app.route('/bottomreturnsData', methods=["GET", "POST"]) #flask documentation
 def bottom_returns_data(name=""):
     if request.method == "POST":
-        json_data = request.get_json(force=True) 
+        json_data = request.get_json(force=True) #parse data as json
         print(json_data) # just a dict
         print(type(json_data))
-        json_data = json.loads(json_data) # convert string to json
+        json_data = json.loads(json_data) # convert json data into python objects
         response_date = bottom_N_returns(json_data["ticker"], int(json_data["interval"]), int(json_data["number_of_returns"]), json_data["start_date"], json_data["end_date"])
         response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
-        return jsonify(response_date_formated)
+        return jsonify(response_date_formated) #response with json representation of arguments 
     else:
         abort(404)
 
@@ -215,7 +215,7 @@ def sharpe_data(name=""):
         print(type(json_data))
         json_data = json.loads(json_data) # convert string to json
         response_date = return_info(json_data["ticker"], float(json_data["risk_free_rate"]), json_data["start_date"], json_data["end_date"])
-        response_date_formated = [{"Statistic":label, "Value": value}  for label, value in response_date.items()] 
+        response_date_formated = [{"Statistic":label, "Value": str(value)}  for label, value in response_date.items()] 
         return jsonify(response_date_formated)
     else:
         abort(404)
@@ -237,10 +237,10 @@ def return_info(ticker, risk_free_rate, start_date, end_date):
     risk_free = risk_free_rate
     # volatility is standard deviation of annualized returns*square root of 252, np is numpy library
     volatility = round(df_sub.std()*np.sqrt(252), 2)
-    final_dict = pd.DataFrame({"Annualized Returns": [mean_returns], "Annualized Volatility": [volatility], "Annualized Sharpe": [(mean_returns-risk_free)/volatility]}).to_dict()
+    final_dict = pd.DataFrame({"Annualized Returns": [mean_returns], "Annualized Volatility": [volatility], "Annualized Sharpe": [round(((mean_returns-risk_free)/volatility),2)]}).to_dict()
     a = {}
     for i in final_dict:
-        a[str(i)] = final_dict[i]
+        a[str(i)] = final_dict[i][0]
     return a
 
 
