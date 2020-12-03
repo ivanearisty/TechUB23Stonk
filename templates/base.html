@@ -1,5 +1,4 @@
 <!doctype html>
-<!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
@@ -27,6 +26,18 @@
     {% endif %}
   </ul>
 </nav>
+
+{% if name %}
+    <h1>Hello {{ name }}!</h1>
+  {% else %}
+    <h1>Hello, World!</h1>
+  {% endif %}
+
+  {% if a %}
+    <h1>Hello {{ a }}</h1>
+  {% else %}
+    <h1>fail</h1>
+  {% endif %}
 <section class="content">
   <header>
     {% block header %}{% endblock %}
