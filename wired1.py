@@ -18,7 +18,7 @@ template_path = os.path.join(project_root, './')
 
 app = Flask(__name__)
 
-
+##app route for each function- 
 @app.route('/')
 def index():
     return render_template('index.html', name="/")
@@ -51,37 +51,36 @@ def sharpe():
     return dictionarytest
 
 
-
-@app.route('/greaterthanData', methods=["GET", "POST"]) #flask documentation get request 
+#app route for when data is submitted
+@app.route('/greaterthanData', methods=["GET", "POST"]) #flask documentation- get request, post is method to send data to server 
 def greater_than_data(name=""):
     if request.method == "POST":
-        json_data = request.get_json(force=True) #parses the json request 
+        json_data = request.get_json(force=True) #parses the data as json data and returns it
         print(json_data)
         print(type(json_data))
-        json_data = json.loads(json_data) #convert json data into python objects
-        response_date = check_percent_greater_by_date_timeframe(json_data["ticker"], int(json_data["interval"]), float(json_data["percent_change"]), json_data["start_date"], json_data["end_date"])
-        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] 
-        return jsonify(response_date_formated) #json representation of the arguments 
+        json_data = json.loads(json_data) #convert json data into python objects within dict
+        response_date = check_percent_greater_by_date_timeframe(json_data["ticker"], int(json_data["interval"]), float(json_data["percent_change"]), json_data["start_date"], json_data["end_date"]) #each of these function arguments become python object with proper data type 
+        response_date_formated = [{"Date":date.replace(" 00:00:00", ""), "Percent Change": round(value ,2)}  for date, value in response_date.items()] #formatting output of function
+        return jsonify(response_date_formated) #json representation of the arguments which will sent to the browser 
     else:
         abort(404)
 
 # greater than a certain percent within a timeframe and period n 
 #@app.route('/CheckPercentGreaterTimeframePeriod/<ticker>/<int:n>/<float:percent_change>/<start_date>/<end_date>') # works
 def check_percent_greater_by_date_timeframe(ticker, interval, percent_change, start_date, end_date):
-    assert pd.to_datetime(start_date) < pd.to_datetime(end_date)
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date) #start date less than end date
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
-        ticker, outputsize='full')[0]
-    df = df.sort_index()
-    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
-    df_sub = df.loc[start_date:end_date]
-    df_sub = df_sub.loc[(df['returns']) >= percent_change, :]
-    # return df_sub[["returns"]].sort_index()
-    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
-    final_dict = df_sub['returns']
+        ticker, outputsize='full')[0] #daily prices output as pandas (for whatever ticker is)
+    df = df.sort_index() #sorted by dates 
+    df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100 #"5. adjusted close is column name- retreive percent change for certain interval "
+    df_sub = df.loc[start_date:end_date] #dataframe of only start date to end date 
+    df_sub = df_sub.loc[(df['returns']) >= percent_change, :] #only returns > than certain percent
+    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict() #sort index by date
+    final_dict = df_sub['returns'] #date and return- no nested dictionairy
     a = {}
     for i in final_dict:
         a[str(i)] = final_dict[i]
-    return a
+    return a #return date without timestamp
 
 @app.route('/lessthanData', methods=["GET", "POST"])
 def less_than_data(name=""):
@@ -222,7 +221,7 @@ def sharpe_data(name=""):
 
 # annualized returns, volatility, and sharpe over a certain timeframe
 #@app.route('/ReturnsInfo/<ticker>/<start_date>/<end_date>')
-def return_info(ticker, risk_free_rate, start_date, end_date):
+def return_info(ticker, risk_free_rate, start_date, end_date): #return of investment relative to risk- 
     assert pd.to_datetime(start_date) < pd.to_datetime(
         end_date), "start_date must eb less than end_date"  # make sure start date < end date
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
@@ -232,7 +231,7 @@ def return_info(ticker, risk_free_rate, start_date, end_date):
     df = df.dropna(subset=["returns"])  # drop NA values
     df_sub = df.loc[start_date:end_date]  # slice of date frame
     df_sub = df_sub["returns"]  # series of the returns
-    # annulizing number of trading days in a year. average daily return*252. risk free rate of 3%
+    # annulizing number of trading days in a year. average daily return*252
     mean_returns = round((df_sub.mean()*252), 2)
     risk_free = risk_free_rate
     # volatility is standard deviation of annualized returns*square root of 252, np is numpy library

@@ -35,12 +35,13 @@
 
 //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
 
+//aray of json objects with values 
 function tableFromJson(data) { //table to display output of function 
     var col = [];  //declare variable column
     for (var i = 0; i < data.length; i++) { //length of varialbe + 1
         for (var key in data[i]) {
             if (col.indexOf(key) === -1) { //1st index where element can be found in an array, equal value and equal type
-                col.push(key);
+                col.push(key); //add items to array
             }
         }
     }
@@ -80,16 +81,15 @@ function tableFromJson(data) { //table to display output of function
 
 function sendSubmit(postData) {
   $.ajax({ //send data to web server 
-      url: "/greaterthanData", //Change 
-      type: 'POST',
-      dataType: 'json',
-      async: false,
-      data: JSON.stringify(postData),
-      contentType: "application/json; charset=UTF-8"
+      url: "/greaterthanData", //url to send request to 
+      type: 'POST', //type of request 
+      dataType: 'json', //datatype expected with server response 
+      async: false, //request shouldn't be handled asynchronous- statement calling must complete before next statement is called 
+      data: JSON.stringify(postData), //data to be sent to server- will be sent as a string 
+      contentType: "application/json; charset=UTF-8" //content type when sending data to the server 
     })
     .done(function(data) { // data will be here
         tableFromJson(data);
-      // alert(data['2020-03-11 00:00:00']);
       return true;
     })
     .fail(function(err) {
@@ -138,7 +138,7 @@ function sendSubmit(postData) {
 
 </script>
 <body>
-
+<!-- desiging layout of page in html -->
  <nav class="navbar navbar-expand-md navbar-dark bg-dark navbar-static-top">
        <a class="navbar-brand">
 <span style="font-size: 100%;">Stock Info</span>
@@ -147,6 +147,7 @@ function sendSubmit(postData) {
     <li class="nav-item">
       <a class="nav-link" href="/">Home</a>
     </li>
+    <!-- proper links on each page -->
     <li class="nav-item">
       <a class="nav-link" class='active-page' href="/greaterthan">Greater Than</a>
     </li>
@@ -212,6 +213,7 @@ function sendSubmit(postData) {
 <!-- drop down in html to select function -->
 <!-- onclick caklls js submit -->
 <br>
+<!-- submit button -->
 <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
 <br>  
 <br>
