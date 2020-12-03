@@ -104,7 +104,7 @@ function sendSubmit(postData) {
 
 
   function submit(){
-    var ticker = document.getElementById('ticker').value;
+    var ticker = document.getElementById('ticker').value; //returns object with id "ticker" 
     var interval = document.getElementById('interval').value;
     var percent_change = document.getElementById('percent_change').value;
     var start_date = document.getElementById('start_date').value;
@@ -129,8 +129,7 @@ function sendSubmit(postData) {
       alert("Please enter text");
       return;
     } 
-    sendSubmit(JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
-  }
+    sendSubmit(JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : submit each input as string 
 
 
 // how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
@@ -176,12 +175,14 @@ function sendSubmit(postData) {
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
 <h2>Greater Than Function</h2>
 <div class="input-group input-group-sm mb-3">
+  <!-- mb-3 is proper margin -->
   <div class="input-group-prepend">
+    <!-- prepend means place add-ons before inputs -->
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
   </div>
   <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm" required>
 </div>
-
+<!-- input as text, form-control is bootstrap style that allows for apperahce, Ticker label, sm is small input group size -->
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
@@ -193,7 +194,6 @@ function sendSubmit(postData) {
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
   </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
   <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
