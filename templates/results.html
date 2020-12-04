@@ -10,70 +10,78 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 <script type="text/javascript">
-    var StockSymbol = "AAPL";
 
-    
-    // Home page function that submits symbol
-    function submitSymbol(){
-        var Ticker = document.getElementById("stonkticker").value;
-        StockSymbol = Ticker;
-        populateTabs();
+//tutorial Modal
+$(window).on('load',function(){
+        $('#introModal').modal('show');
+    });
+//app logic goes here
+    var StockSymbol = "AAPL";
+    var SearchCache = [];
+    var CurrentTickerData = {};
+
+    //saves all prior searches to cache, so we can compare
+    function saveTicker(){
+        SearchCache[SearchCache.length] = CurrentTickerData;
     }
+
+
 
     function populateTabs(){
+        //populate every single tab baby
+
 
     }
     
     
-        //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
-        
-        //aray of json objects with values 
-        function tableFromJson(data) { //table to display output of function 
-            var col = [];  //declare variable column
-            for (var i = 0; i < data.length; i++) { //length of varialbe + 1
-                for (var key in data[i]) {
-                    if (col.indexOf(key) === -1) { //1st index where element can be found in an array, equal value and equal type
-                        col.push(key); //add items to array
-                    }
+    //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+    
+    //aray of json objects with values 
+    function tableFromJson(data) { //table to display output of function 
+        var col = [];  //declare variable column
+        for (var i = 0; i < data.length; i++) { //length of varialbe + 1
+            for (var key in data[i]) {
+                if (col.indexOf(key) === -1) { //1st index where element can be found in an array, equal value and equal type
+                    col.push(key); //add items to array
                 }
             }
-        
-            // Create a table.
-            var table = document.createElement("table"); //create table
-        
-            // Create table header row using the extracted headers above.
-            var tr = table.insertRow(-1);                   // table row.
-        
-            for (var i = 0; i < col.length; i++) {
-                var th = document.createElement("th");      // ceate table header.
-                th.innerHTML = col[i];
-                tr.appendChild(th);
-            }
-        
-            // add json data to the table as rows.
-            for (var i = 0; i < data.length; i++) {
-        
-                tr = table.insertRow(-1);
-        
-                for (var j = 0; j < col.length; j++) {
-                    var tabCell = tr.insertCell(-1);  //insert new cell with content at beginning of table row
-                    tabCell.innerHTML = data[i][col[j]];
-                }
-            }
-        
-            // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
-            var divShowData = document.getElementById('showData'); //returns an element object whose id property matches the specified string 
-            divShowData.innerHTML = "";
-            divShowData.appendChild(table);
-        
         }
-            
+    
+        // Create a table.
+        var table = document.createElement("table"); //create table
+    
+        // Create table header row using the extracted headers above.
+        var tr = table.insertRow(-1);                   // table row.
+    
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // ceate table header.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+    
+        // add json data to the table as rows.
+        for (var i = 0; i < data.length; i++) {
+    
+            tr = table.insertRow(-1);
+    
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);  //insert new cell with content at beginning of table row
+                tabCell.innerHTML = data[i][col[j]];
+            }
+        }
+    
+        // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
+        var divShowData = document.getElementById('showData'); //returns an element object whose id property matches the specified string 
+        divShowData.innerHTML = "";
+        divShowData.appendChild(table);
+    
+    }
+
         
-        function sendSubmit(postData) {
+        function sendSubmit(url, postData) {
           $.ajax({ //send data to web server 
-              url: "/greaterthanData", //url to send request to 
+              url: url, //url to send request to 
               type: 'POST', //type of request 
               dataType: 'json', //datatype expected with server response 
               async: false, //request shouldn't be handled asynchronous- statement calling must complete before next statement is called 
@@ -95,39 +103,65 @@
         };
         
         
-          function submit(){
-            var ticker = document.getElementById('ticker').value;
-            var interval = document.getElementById('interval').value;
-            var percent_change = document.getElementById('percent_change').value;
-            var start_date = document.getElementById('start_date').value;
-            var end_date = document.getElementById('end_date').value;
-            if (ticker == null){
-              alert("Please enter text");
-              return;
+          function submit(type){
+            switch(type){
+                case "greaterthan":
+//                var ticker = document.getElementById('ticker').value;
+                var ticker = StockSymbol;
+                var interval = document.getElementById('interval').value;
+                var percent_change = document.getElementById('percent_change').value;
+                var start_date = document.getElementById('start_date').value;
+                var end_date = document.getElementById('end_date').value;
+                var url = "/greaterthanData";
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                alert("Please enter text");
+                return;
+                }
+                if (percent_change == null){
+                alert("Please enter text");
+                return;
+                } 
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
+                        break;
+                case "lessthan":
+                break;
+                case "margin":
+                break;
+                case "bestreturns":
+                break;
+                case "worstreturns":
+                break;
+                case "sharpe":
+                break;    
+
+                default:
+                return;   
             }
-            if (interval == null){
-              alert("Please enter text");
-              return;
-            }
-            if (percent_change == null){
-              alert("Please enter text");
-              return;
-            } 
-            if (start_date == null){
-              alert("Please enter text");
-              return;
-            }  
-            if (end_date == null){
-              alert("Please enter text");
-              return;
-            } 
-            sendSubmit(JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
+            
+         
           }
         
         
         // how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
         //In html add a drop down to selct the mehtod. add value to json. Send to server. Server will look at this value in an iff statement and selct the correct method. "{"ttypekl": above"}. Then based on the tpye you will get the correct repsonse. This will be the data in the send sumbit. So used data variable and html json code 
-        </script>
+        //Jquery shit
+        //Init puts AAPL as defailt in every class
+        $( ".stonksymbol" ).val( "AAPL" );
+        $StockSelected = $( ".class" ).val();
+        
+</script>
         
 </head>
 
@@ -216,10 +250,40 @@ th, td, p, input, h3 {
       <li class="nav-item">
         <a class="nav-link" id="settings-tab" data-toggle="tab" href="#Sharpe" role="tab" aria-controls="settings" aria-selected="false">Sharpe</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#Sharpe" role="tab" aria-controls="settings" aria-selected="false">Compare All</a>
+      </li>
   </ul>
 </div>
 
+<!-- Intro Modal -->
+<div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog .modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Welcome to Stonk Analyzer v0.1</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          There are too many Stonks listed on <strike>WallStreetBets</strike> Nasdaq. Which one should an autist choose to #YOLO his lifesavings in?
+
+          Lets find out.
+        </div>
+        <div class="modal-body">
+            Enter your favourite Stonk below, and see the results.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"><a style="color:white" href="https://www.samhsa.gov/find-help/national-helpline">I'm not a degenerate autist! Get me out of Here!</a></button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <!-- Tab panes -->
+
 <div class="tab-content">
     <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <p>
@@ -237,11 +301,11 @@ th, td, p, input, h3 {
         
         <h4 style="color:black">To begin, enter your Stonk Symbol here:</h2>
         
-        <div class="input-group">
+        <div class="input-group input-group-sm mb-3">
           <div class="input-group-prepend">
             <span class="input-group-text">Symbol</span>
           </div>
-          <input type="text" id='stonkticker' class="form-control" value="AAPL">    
+          <input type="text" class='stonkticker' class="form-control" value="AAPL">    
         </div>     
         <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
 
@@ -249,12 +313,12 @@ th, td, p, input, h3 {
     <div class="tab-pane" id="GreaterThan" role="tabpanel" aria-labelledby="greaterthan-tab">
         Greater THAN
         <p id='showData'></p>
-        <div class="input-group input-group-sm mb-3">
+        <div class="input-group">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm" >Ticker</span>
+              <span class="input-group-text">Symbol</span>
             </div>
-            <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm" value="AAPL" required>
-          </div>
+            <input type="text" class='form-control stonkticker'>    
+          </div>     
           
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
@@ -288,7 +352,7 @@ th, td, p, input, h3 {
           <!-- onclick caklls js submit -->
           <br>
           <!-- submit button -->
-          <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
+          <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('greaterthan');">Submit</button>
     
     </div>
 
