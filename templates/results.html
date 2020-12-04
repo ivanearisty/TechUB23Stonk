@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<head>
+  <title>#YOLO Stonks</title> 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script type="text/javascript">
+    console.log("script is running");
+    var StockSymbol = "AAPL";
+    
+    // Home page function that submits symbol
+    function submitSymbol(stock){
+       return StockSymbol = document.getElementsById("stonkticker");
+        console.log("the global is" + StockSymbol);
+    }
+    
+    
+        //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+        
+        //aray of json objects with values 
+        function tableFromJson(data) { //table to display output of function 
+            var col = [];  //declare variable column
+            for (var i = 0; i < data.length; i++) { //length of varialbe + 1
+                for (var key in data[i]) {
+                    if (col.indexOf(key) === -1) { //1st index where element can be found in an array, equal value and equal type
+                        col.push(key); //add items to array
+                    }
+                }
+            }
+        
+            // Create a table.
+            var table = document.createElement("table"); //create table
+        
+            // Create table header row using the extracted headers above.
+            var tr = table.insertRow(-1);                   // table row.
+        
+            for (var i = 0; i < col.length; i++) {
+                var th = document.createElement("th");      // ceate table header.
+                th.innerHTML = col[i];
+                tr.appendChild(th);
+            }
+        
+            // add json data to the table as rows.
+            for (var i = 0; i < data.length; i++) {
+        
+                tr = table.insertRow(-1);
+        
+                for (var j = 0; j < col.length; j++) {
+                    var tabCell = tr.insertCell(-1);  //insert new cell with content at beginning of table row
+                    tabCell.innerHTML = data[i][col[j]];
+                }
+            }
+        
+            // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
+            var divShowData = document.getElementById('showData'); //returns an element object whose id property matches the specified string 
+            divShowData.innerHTML = "";
+            divShowData.appendChild(table);
+        
+        }
+            
+        
+        function sendSubmit(postData) {
+          $.ajax({ //send data to web server 
+              url: "/greaterthanData", //url to send request to 
+              type: 'POST', //type of request 
+              dataType: 'json', //datatype expected with server response 
+              async: false, //request shouldn't be handled asynchronous- statement calling must complete before next statement is called 
+              data: JSON.stringify(postData), //data to be sent to server- will be sent as a string 
+              contentType: "application/json; charset=UTF-8" //content type when sending data to the server 
+            })
+            .done(function(data) { // data will be here
+                tableFromJson(data);
+              return true;
+            })
+            .fail(function(err) {
+              return false;
+            })
+            .always(function(info) {
+              // alert();
+              return "failed";
+            });
+          return true;
+        };
+        
+        
+          function submit(){
+            var ticker = document.getElementById('ticker').value;
+            var interval = document.getElementById('interval').value;
+            var percent_change = document.getElementById('percent_change').value;
+            var start_date = document.getElementById('start_date').value;
+            var end_date = document.getElementById('end_date').value;
+            if (ticker == null){
+              alert("Please enter text");
+              return;
+            }
+            if (interval == null){
+              alert("Please enter text");
+              return;
+            }
+            if (percent_change == null){
+              alert("Please enter text");
+              return;
+            } 
+            if (start_date == null){
+              alert("Please enter text");
+              return;
+            }  
+            if (end_date == null){
+              alert("Please enter text");
+              return;
+            } 
+            sendSubmit(JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
+          }
+        
+        
+        // how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
+        //In html add a drop down to selct the mehtod. add value to json. Send to server. Server will look at this value in an iff statement and selct the correct method. "{"ttypekl": above"}. Then based on the tpye you will get the correct repsonse. This will be the data in the send sumbit. So used data variable and html json code 
+        </script>
+        
+</head>
+
+<style>
+body {font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif , sans-serif;}
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #686464a6;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
+th, td, p, input, h3 {
+          /*header cell, data cell, paragraph, user enter data, size */
+            font:15px 'Segoe UI';
+        }
+        table, th, td {
+          /*table, header, data*/
+            border: solid 1px #ddd;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+</style>
+
+<body>   
+ <div class="header">
+
+ <!-- Nav tabs -->
+<ul class="nav nav-tabs navbar navbar-expand-md navbar-dark bg-dark navbar-static-top" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active navbar-brand" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Stonk Analyzer v0.1</a>
+    </li>
+
+    <li class="nav-item">
+        
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#GreaterThan" role="tab" aria-controls="profile" aria-selected="false">Greater Than</a>
+      </li>
+
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#LessThan" role="tab" aria-controls="profile" aria-selected="false">Less Than</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="messages-tab" data-toggle="tab" href="#Margin" role="tab" aria-controls="messages" aria-selected="false">Margin</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="settings-tab" data-toggle="tab" href="#BestReturns" role="tab" aria-controls="settings" aria-selected="false">Best Returns</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#WorstReturns" role="tab" aria-controls="settings" aria-selected="false">Worst Returns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#Sharpe" role="tab" aria-controls="settings" aria-selected="false">Sharpe</a>
+      </li>
+  </ul>
+</div>
+
+<!-- Tab panes -->
+<div class="tab-content">
+    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <p>
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+              How it works:
+            </a>
+        </p>
+          <div class="collapse" id="collapseExample">
+            <div class="card card-body">
+              Enter your Stonks to see how they did.
+        
+              Then mortgage your house and YOLO call options
+            </div>
+          </div>
+        
+        <h2 class="response banner" style="color:white">Enter your Stonks here:</h2>
+        
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Symbol</span>
+          </div>
+          <input type="text" id='stonkticker' class="form-control">    
+        </div>     
+        <button id="submit" type="button" class="btn btn-primary">Find Stonks</button>
+
+    </div>
+    <div class="tab-pane" id="GreaterThan" role="tabpanel" aria-labelledby="greaterthan-tab">
+        Greater THAN
+        Logic here
+
+
+    </div>
+    <div class="tab-pane" id="LessThan" role="tabpanel" aria-labelledby="lessthan-tab">...
+        LESS THAN
+    </div>
+    <div class="tab-pane" id="Margin" role="tabpanel" aria-labelledby="margin-tab">...
+        MARGIN
+
+    </div>
+    <div class="tab-pane" id="BestReturns" role="tabpanel" aria-labelledby="bestreturns-tab">...
+        Best RETURNS
+    </div>
+    <div class="tab-pane" id="WorstReturns" role="tabpanel" aria-labelledby="worst-tab">...
+        Worst RETURNS
+    </div>
+    <div class="tab-pane" id="Sharpe" role="tabpanel" aria-labelledby="settings-tab">...
+        ANN SHARPE
+    </div>
+</div>
+<!--End of Tab Panes-->
+
+</body>
+</html>
