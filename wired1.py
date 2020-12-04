@@ -21,7 +21,7 @@ app = Flask(__name__)
 ##app route for each function- 
 @app.route('/')
 def index():
-    return render_template('index.html', name="/")
+    return render_template('results.html', name="/")
 
 
 @app.route('/margin')

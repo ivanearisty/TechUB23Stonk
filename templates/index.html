@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>NAME IN Tab</title> 
+  <title>#YOLO Stonks</title> 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -71,7 +71,6 @@
     <span class="input-group-text">Symbol</span>
   </div>
   <input type="text" class="form-control">
-
 </div>
 
 <button id="submit" type="button" class="btn btn-primary">Find Stonks</button>
@@ -90,13 +89,21 @@
     <!-- Add more urls. href is the name of the page. -->
   </div>
 </div>
-<br>
-
-
-
-
-
 </div>
-
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
 </body>
 </html>
