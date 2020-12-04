@@ -12,13 +12,18 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script type="text/javascript">
-    console.log("script is running");
     var StockSymbol = "AAPL";
+
     
     // Home page function that submits symbol
-    function submitSymbol(stock){
-       return StockSymbol = document.getElementsById("stonkticker");
-        console.log("the global is" + StockSymbol);
+    function submitSymbol(){
+        var Ticker = document.getElementById("stonkticker").value;
+        StockSymbol = Ticker;
+        populateTabs();
+    }
+
+    function populateTabs(){
+
     }
     
     
@@ -226,11 +231,11 @@ th, td, p, input, h3 {
             <div class="card card-body">
               Enter your Stonks to see how they did.
         
-              Then mortgage your house and YOLO call options
+              Then mortgage your house and YOLO call options.
             </div>
           </div>
         
-        <h2 class="response banner" style="color:white">Enter your Stonks here:</h2>
+        <h4 style="color:black">To begin, enter your Stonk Symbol here:</h2>
         
         <div class="input-group">
           <div class="input-group-prepend">
@@ -238,7 +243,7 @@ th, td, p, input, h3 {
           </div>
           <input type="text" id='stonkticker' class="form-control">    
         </div>     
-        <button id="submit" type="button" class="btn btn-primary">Find Stonks</button>
+        <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
 
     </div>
     <div class="tab-pane" id="GreaterThan" role="tabpanel" aria-labelledby="greaterthan-tab">
