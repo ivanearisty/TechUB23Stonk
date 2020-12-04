@@ -36,7 +36,7 @@
 //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
 
 //aray of json objects with values 
-function tableFromJson(data) { //table to display output of function 
+function tableFromJson(data, destination) { //table to display output of function 
     var col = [];  //declare variable column
     for (var i = 0; i < data.length; i++) { //length of varialbe + 1
         for (var key in data[i]) {
@@ -70,7 +70,7 @@ function tableFromJson(data) { //table to display output of function
     }
 
     // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
-    var divShowData = document.getElementById('showData'); //returns an element object whose id property matches the specified string 
+    var divShowData = document.getElementById(destination); //returns an element object whose id property matches the specified string 
     divShowData.innerHTML = "";
     divShowData.appendChild(table);
 

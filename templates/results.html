@@ -38,7 +38,7 @@ $(window).on('load',function(){
     //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
     
     //aray of json objects with values 
-    function tableFromJson(data) { //table to display output of function 
+    function tableFromJson(data, destination) { //table to display output of function 
         var col = [];  //declare variable column
         for (var i = 0; i < data.length; i++) { //length of varialbe + 1
             for (var key in data[i]) {
@@ -72,14 +72,15 @@ $(window).on('load',function(){
         }
     
         // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
-        var divShowData = document.getElementById('showData'); //returns an element object whose id property matches the specified string 
+        var divShowData = document.getElementById(destination); //returns an element object whose id property matches the specified string 
         divShowData.innerHTML = "";
         divShowData.appendChild(table);
     
     }
 
         
-        function sendSubmit(url, postData) {
+        function sendSubmit(url, postData, destination) {
+            console.log("send submit running");  
           $.ajax({ //send data to web server 
               url: url, //url to send request to 
               type: 'POST', //type of request 
@@ -89,7 +90,7 @@ $(window).on('load',function(){
               contentType: "application/json; charset=UTF-8" //content type when sending data to the server 
             })
             .done(function(data) { // data will be here
-                tableFromJson(data);
+                tableFromJson(data, destination);
               return true;
             })
             .fail(function(err) {
@@ -97,6 +98,7 @@ $(window).on('load',function(){
             })
             .always(function(info) {
               // alert();
+              alert("API call failed");
               return "failed";
             });
           return true;
@@ -104,9 +106,11 @@ $(window).on('load',function(){
         
         
           function submit(type){
+              console.log("submit running");
             switch(type){
+
                 case "greaterthan":
-//                var ticker = document.getElementById('ticker').value;
+//              var ticker = document.getElementById('ticker').value;
                 var ticker = StockSymbol;
                 var interval = document.getElementById('interval').value;
                 var percent_change = document.getElementById('percent_change').value;
@@ -133,16 +137,56 @@ $(window).on('load',function(){
                 alert("Please enter text");
                 return;
                 } 
-                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date})); //type : drop down cvalue 
-                        break;
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date}), "showGreaterThan"); //type : drop down cvalue 
+                
+                break;
+
+
                 case "lessthan":
                 break;
+
+
                 case "margin":
                 break;
+
+
                 case "bestreturns":
                 break;
+
+
                 case "worstreturns":
+
+                var ticker = StockSymbol;
+                var interval = document.getElementById('interval').value;
+                var number_of_returns = document.getElementById('number_of_returns').value;
+                var start_date = document.getElementById('start_date').value;
+                var end_date = document.getElementById('end_date').value;
+                var url = "/bottomreturnsData";
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                alert("Please enter text");
+                return;
+                }
+                if (number_of_returns == null){
+                alert("Please enter text");
+                return;
+                } 
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, number_of_returns: number_of_returns, start_date: start_date, end_date: end_date}), "showWorstReturns"); //type : drop down cvalue 
+            
                 break;
+
+
                 case "sharpe":
                 break;    
 
@@ -251,7 +295,7 @@ th, td, p, input, h3 {
         <a class="nav-link" id="settings-tab" data-toggle="tab" href="#Sharpe" role="tab" aria-controls="settings" aria-selected="false">Sharpe</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#Sharpe" role="tab" aria-controls="settings" aria-selected="false">Compare All</a>
+        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#Sharpe" role="tab" aria-controls="settings" aria-selected="false">Comparison</a>
       </li>
   </ul>
 </div>
@@ -285,6 +329,7 @@ th, td, p, input, h3 {
 <!-- Tab panes -->
 
 <div class="tab-content">
+    <!-- Home -->
     <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <p>
             <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -310,9 +355,10 @@ th, td, p, input, h3 {
         <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
 
     </div>
+    <!-- Greater Than -->
     <div class="tab-pane" id="GreaterThan" role="tabpanel" aria-labelledby="greaterthan-tab">
         Greater THAN
-        <p id='showData'></p>
+        <p id='showGreaterThan'></p>
         <div class="input-group">
             <div class="input-group-prepend">
               <span class="input-group-text">Symbol</span>
@@ -355,24 +401,137 @@ th, td, p, input, h3 {
           <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('greaterthan');">Submit</button>
     
     </div>
-
-
-    
+    <!-- Less Than -->
     <div class="tab-pane" id="LessThan" role="tabpanel" aria-labelledby="lessthan-tab">...
         LESS THAN
     </div>
+    <!-- Margin -->
     <div class="tab-pane" id="Margin" role="tabpanel" aria-labelledby="margin-tab">...
         MARGIN
+        
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+<h2>Margin Function</h2>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+  </div>
+  <input type="number" class="form-control" aria-label="Interval" id="interval" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Margin</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Margin" id="margin" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
+<br>  
+<br>
+<p id='showData'></p>
+
+
 
     </div>
+    <!-- Best returns -->
     <div class="tab-pane" id="BestReturns" role="tabpanel" aria-labelledby="bestreturns-tab">...
         Best RETURNS
     </div>
+    <!-- Worst Returns -->
     <div class="tab-pane" id="WorstReturns" role="tabpanel" aria-labelledby="worst-tab">...
         Worst RETURNS
+    <p id='showWorstReturns'></p>
+
+
+        <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+        <h2>Bottom Returns Function</h2>
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Interval" id="interval" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
+        </div>
+        <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+        <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+        </div>
+        <input type="Date" class="form-control" aria-label="Start Date" id="start_date" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+        </div>
+        <input type="Date" class="form-control" aria-label="End Date" id="end_date" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+        <!-- drop down in html to select function -->
+        <!-- onclick caklls js submit -->
+        <br>
+        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('worstreturns');">Submit</button>
+        <br>  
+        <br>
+
+
+
     </div>
+    <!-- Annual Sharpe -->
     <div class="tab-pane" id="Sharpe" role="tabpanel" aria-labelledby="settings-tab">...
         ANN SHARPE
+    
+    </div>
+    <!-- Comparisons -->
+    <div class="tab-pane" id="Comparison" role="tabpanel" aria-labelledby="settings-tab">...
+        Comparison
+    
     </div>
 </div>
 <!--End of Tab Panes-->
