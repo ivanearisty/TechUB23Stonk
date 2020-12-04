@@ -241,17 +241,59 @@ th, td, p, input, h3 {
           <div class="input-group-prepend">
             <span class="input-group-text">Symbol</span>
           </div>
-          <input type="text" id='stonkticker' class="form-control">    
+          <input type="text" id='stonkticker' class="form-control" value="AAPL">    
         </div>     
         <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
 
     </div>
     <div class="tab-pane" id="GreaterThan" role="tabpanel" aria-labelledby="greaterthan-tab">
         Greater THAN
-        Logic here
-
-
+        <p id='showData'></p>
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm" >Ticker</span>
+            </div>
+            <input type="text" class="form-control" aria-label="Ticker" id="ticker" aria-describedby="inputGroup-sizing-sm" value="AAPL" required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+            </div>
+            <input type="number" class="form-control" aria-label="Interval" id="interval" aria-describedby="inputGroup-sizing-sm" value=1 required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
+            </div>
+            <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+            <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" value=5 required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+            </div>
+            <input type="Date" class="form-control" aria-label="Start Date" id="start_date" aria-describedby="inputGroup-sizing-sm" value="12/01/2019" required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+            </div>
+            <input type="Date" class="form-control" aria-label="End Date" id="end_date" aria-describedby="inputGroup-sizing-sm" value="12/01/2020" required>
+          </div>
+          <!-- drop down in html to select function -->
+          <!-- onclick caklls js submit -->
+          <br>
+          <!-- submit button -->
+          <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
+    
     </div>
+
+
+    
     <div class="tab-pane" id="LessThan" role="tabpanel" aria-labelledby="lessthan-tab">...
         LESS THAN
     </div>
