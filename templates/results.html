@@ -199,6 +199,29 @@ var CurrentTickerData = {};
 
 
                 case "sharpe":
+                var url = "/sharpeData";
+                var ticker = document.getElementById('ticker').value;
+                var risk_free_rate = document.getElementById('risk_free_rate').value;
+                var start_date = document.getElementById('start_date').value;
+                var end_date = document.getElementById('end_date').value;
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (risk_free_rate == null){
+                alert("Please enter text");
+                return;
+                }
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, risk_free_rate: risk_free_rate, start_date: start_date, end_date: end_date}),"showSharpe"); //type : drop down cvalue 
+            
                 break;    
 
                 default:
