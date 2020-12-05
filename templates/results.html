@@ -23,8 +23,8 @@ $(window).on('load',function(){
 //Global Stomk, Data, and past data
 var $StockSymbol = "AAPL";
 console.log("StockSYmbol Initialized " + StockSymbol);
-var SearchCache = [];
-var CurrentTickerData = {};
+var $SearchCache = [];
+var $CurrentTickerData = {};
 
     //saves all prior searches to cache, so we can compare
     function saveTicker(){
@@ -101,7 +101,8 @@ var CurrentTickerData = {};
               contentType: "application/json; charset=UTF-8" //content type when sending data to the server 
             })
             .done(function(data) { // data will be here
-                CurrentTickerData[destination] = data;
+               // $CurrentTickerData[destination] = data;
+                console.log(data);
                 tableFromJson(data, destination);
               return true;
             })
@@ -361,14 +362,18 @@ th, td, p, input, h3 {
         th {
             font-weight:bold;
         }
+
+        a {
+            color: white;
+        }
 </style>
 
 <body>   
  <div class="header">
 
  <!-- Nav tabs -->
-<div class="navbar-expand-md" style="background-color: #3a404496; margin-bottom: 24px;">
-    <ul class="nav navbar nav-tabs navbar-nav nav-pills navbar-light bg-light mb-3 nav-fill" id="myTab" role="tablist">
+<div class="navbar-expand-md" style=" margin-bottom: 24px; color: green;">
+    <ul class="nav navbar nav-tabs navbar-nav nav-pills navbar-dark bg-secondary mb-3 nav-fill" id="myTab" role="tablist">
     <li class="nav-item">
       <a class="nav-link active navbar-brand" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Stonk Analyzer v0.1</a>
     </li>
