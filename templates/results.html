@@ -30,7 +30,8 @@ $CurrentTickerData = {};
 //Stockticker update jquery
 $(function(ready){
   $('#stonkticker').on('input', function() {
-    $StockSymbol = $('.ticker').val();
+    $StockSymbol = $('#stonkticker').val();
+    $('.stonkticker').val($StockSymbol);
     console.log($StockSymbol);
   });
 });
@@ -536,7 +537,7 @@ th, td, p, input, h3 {
                     <div class="input-group-prepend col-xs-4">
                       <span class="input-group-text" >Symbol</span>
                     </div >
-                    <input type="text" id="stonkticker" class="ticker form-control" aria-label="Small" value="AAPL">    
+                    <input type="text" id="stonkticker" class="stonkticker form-control" aria-label="Small" value="AAPL">    
                   </div>     
                   <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>   
               
