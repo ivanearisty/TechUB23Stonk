@@ -13,455 +13,7 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
-<script>  
-
-</script>
-        
-</head>
-
-<style>
-body {font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif , sans-serif;}
-
-
-
-th, td, p, input, h3 {
-          /*header cell, data cell, paragraph, user enter data, size */
-            font:15px 'Segoe UI';
-        }
-        table, th, td {
-          /*table, header, data*/
-            border: solid 1px #ddd;
-            border-collapse: collapse;
-            padding: 2px 3px;
-            text-align: center;
-        }
-        th {
-            font-weight:bold;
-        }
-
-        a {
-            color: white;
-        }
-</style>
-
-<body>   
- <div class="header">
-
- <!-- Nav tabs -->
-<div class="navbar-expand-md" style=" margin-bottom: 24px; color: green;">
-    <ul class="nav navbar nav-tabs navbar-nav nav-pills navbar-dark bg-secondary mb-3 nav-fill" id="myTab" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active navbar-brand" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Stonk Analyzer v0.1</a>
-    </li>
-
-    <li class="nav-item">
-        
-      <a class="nav-link" id="greaterthan-tab" data-toggle="tab" href="#greaterthan" role="tab" aria-controls="greaterthan" aria-selected="false">Greater Than</a>
-      </li>
-
-    <li class="nav-item">
-      <a class="nav-link" id="lessthan-tab" data-toggle="tab" href="#lessthan" role="tab" aria-controls="lessthan" aria-selected="false">Less Than</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="margin-tab" data-toggle="tab" href="#margin" role="tab" aria-controls="margin" aria-selected="false">Margin</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" id="bestreturns-tab" data-toggle="tab" href="#bestreturns" role="tab" aria-controls="bestreturns" aria-selected="false">Best Returns</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" id="worstreturns-tab" data-toggle="tab" href="#worstreturns" role="tab" aria-controls="worstreturns" aria-selected="false">Worst Returns</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="sharpe-tab" data-toggle="tab" href="#sharpe" role="tab" aria-controls="sharpe" aria-selected="false">Sharpe</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="sharpe-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare" aria-selected="false">Comparison</a>
-      </li>
-  </ul>
-    </div>
-</div>
-<div id="center" style="height:600px; width: 600px;">
-    <canvas id="myChart" width="200" height="200"></canvas>
-    
- </div>
-
-<!-- Intro Modal -->
-<div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog .modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Welcome to Stonk Analyzer v0.1</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          There are too many Stonks listed on <strike>WallStreetBets</strike> Nasdaq. Which one should you choose to #YOLO your lifesavings in?
-
-          Lets find out.
-        </div>
-        <div class="modal-body">
-            Enter your favourite Stonk below, and see the results.
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary"><a style="color:white" href="https://www.samhsa.gov/find-help/national-helpline">I have a gambling problem! Get me out of Here!</a></button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<!-- Tab panes -->
-
-<div class="tab-content">
-    <!-- Home -->
-    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="class">
-    
-        <h4 style="color:black">To begin, enter your Stonk Symbol here:</h4>
-        <div class="class-body">
-            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                How it works:
-              </a>
-          
-            <div class="collapse" id="collapseExample">
-              <div class="card card-body">
-                Enter your Stonks to see how they did.
-          
-                Then mortgage your house and YOLO call options.
-              </div>
-            </div>
-        </div>    
-        <div class="card-body input-group input-group-sm mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Symbol</span>
-          </div>
-          <input type="text" class='stonkticker' class="form-control" value="AAPL">    
-        </div>     
-        <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
-    </div>
-    </div>
-    <!-- Greater Than -->
-    <div class="tab-pane" id="greaterthan" role="tabpanel" aria-labelledby="greaterthan-tab">
-        Greater THAN
-        <div class="card">
-            <div class="card-body" id='showGreaterThan'>
-            </div>  
-       
-
-        </div>
-        <div class="input-group">
-            <div class="input-group-prepend">
-              <span class="input-group-text">Symbol</span>
-            </div>
-            <input type="text" class='form-control stonkticker'>    
-          </div>     
-          
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
-            </div>
-            <input type="number" class="form-control" aria-label="Interval" id="interval" aria-describedby="inputGroup-sizing-sm" value=1 required>
-          </div>
-          
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
-            </div>
-            <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-            <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" value=5 required>
-          </div>
-          
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
-            </div>
-            <input type="Date" class="form-control" aria-label="Start Date" id="start_date" aria-describedby="inputGroup-sizing-sm" value="12/01/2019" required>
-          </div>
-          
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
-            </div>
-            <input type="Date" class="form-control" aria-label="End Date" id="end_date" aria-describedby="inputGroup-sizing-sm" value="12/01/2020" required>
-          </div>
-          <!-- drop down in html to select function -->
-          <!-- onclick caklls js submit -->
-          <br>
-          <!-- submit button -->
-          <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('greaterthan');">Submit</button>
-    
-    </div>
-    <!-- Less Than -->
-    <div class="tab-pane" id="lessthan" role="tabpanel" aria-labelledby="lessthan-tab">
-
-<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Less Than Function</h2>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Ticker" id="ticker1" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
-  </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval1" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
-  </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change1" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
-  </div>
-  <input type="Date" class="form-control" aria-label="Start Date" id="start_date1" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
-  </div>
-  <input type="Date" class="form-control" aria-label="End Date" id="end_date1" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-<!-- drop down in html to select function -->
-<!-- onclick caklls js submit -->
-<br>
-<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
-<br>  
-<br>
-<p id='showLessThan'></p>
-
-    </div>
-    <!-- Margin -->
-    <div class="tab-pane" id="margin" role="tabpanel" aria-labelledby="margin-tab">
-        <p id='showMargin'></p>
-        
-<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Margin Function</h2>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Ticker" id="ticker2" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
-  </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval2" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
-  </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change2" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Margin</span>
-  </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Margin" id="margin2" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
-  </div>
-  <input type="Date" class="form-control" aria-label="Start Date" id="start_date2" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
-  </div>
-  <input type="Date" class="form-control" aria-label="End Date" id="end_date2" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<!-- drop down in html to select function -->
-<!-- onclick caklls js submit -->
-<br>
-<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
-<br>  
-<br>
-
-
-
-
-    </div>
-    <!-- Best returns -->
-    <div class="tab-pane" id="bestreturns" role="tabpanel" aria-labelledby="bestreturns-tab">
-        <p id='showBestReturns'></p>
-
-<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Top Returns Function</h2>
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
-  </div>
-  <input type="text" class="form-control" aria-label="Ticker" id="ticker3" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
-  </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval3" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
-  </div>
-  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns3" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
-  </div>
-  <input type="Date" class="form-control" aria-label="Start Date" id="start_date3" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-  <div class="input-group-prepend">
-    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
-  </div>
-  <input type="Date" class="form-control" aria-label="End Date" id="end_date3" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-<!-- drop down in html to select function -->
-<!-- onclick caklls js submit -->
-<br>
-<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
-<br>  
-<br>
-
-
-
-    </div>
-    <!-- Worst Returns -->
-    <div class="tab-pane" id="worstreturns" role="tabpanel" aria-labelledby="worstreturns-tab">
-        
-    <p class="showresults" id='showWorstReturns'></p>
-
-        <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-        <h2>Worst Returns Function</h2>
-        <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
-        </div>
-        <input type="text" class="form-control" aria-label="Ticker" id="ticker4" aria-describedby="inputGroup-sizing-sm" required>
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
-        </div>
-        <input type="number" class="form-control" aria-label="Interval" id="interval4" aria-describedby="inputGroup-sizing-sm" required>
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
-        </div>
-        <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-        <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns4" aria-describedby="inputGroup-sizing-sm" required>
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
-        </div>
-        <input type="Date" class="form-control" aria-label="Start Date" id="start_date4" aria-describedby="inputGroup-sizing-sm" required>
-        </div>
-
-        <div class="input-group input-group-sm mb-3">
-        <div class="input-group-prepend">
-            <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
-        </div>
-        <input type="Date" class="form-control" aria-label="End Date" id="end_date4" aria-describedby="inputGroup-sizing-sm" required>
-        </div>
-        <!-- drop down in html to select function -->
-        <!-- onclick caklls js submit -->
-        <br>
-        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('worstreturns');">Submit</button>
-        <br>  
-        <br>
-
-
-
-    </div>
-    <!-- Annual Sharpe -->
-    <div class="tab-pane" id="sharpe" role="tabpanel" aria-labelledby="sharpe-tab">
-<div class="container-fluid">
-
-
-<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Annualized Sharpe Ratio Function</h2>
-<div class="input-group input-group-sm mb-3">
-<div class="input-group-prepend">
- <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
-</div>
-<input type="text" class="form-control" aria-label="Ticker" id="ticker5" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-<div class="input-group-prepend">
- <span class="input-group-text" id="inputGroup-sizing-sm">Risk Free Rate</span>
-</div>
-<input type="number" class="form-control" aria-label="Risk Free Rate" id="risk_free_rate5" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-<div class="input-group-prepend">
- <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
-</div>
-<input type="Date" class="form-control" aria-label="Start Date" id="start_date5" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-
-<div class="input-group input-group-sm mb-3">
-<div class="input-group-prepend">
- <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
-</div>
-<input type="Date" class="form-control" aria-label="End Date" id="end_date5" aria-describedby="inputGroup-sizing-sm" required>
-</div>
-<!-- drop down in html to select function -->
-<!-- onclick caklls js submit -->
-<br>
-<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit();">Submit</button>
-<br>  
-<br>
-<p id='showSharpe'></p>
-
-
-
-
-</div>    
-    
-    </div>
-    <!-- Comparisons -->
-    <div class="tab-pane" id="compare" role="tabpanel" aria-labelledby="comparison-tab">...
-        Comparison
-
-    
-    </div>
-</div>
-<!--End of Tab Panes-->
-<script>
+  <script>
     //app logic goes here
 //tutorial Modal trigger
 $(window).on('load',function(){
@@ -567,15 +119,14 @@ $CurrentTickerData = {};
         };
         
         
-          function submit(type){
+        function submit(type){
               console.log("submit running");
               console.log($StockSymbol);
             switch(type){
 
                 case "greaterthan":
 //              var ticker = document.getElementById('ticker').value;
-
-                var ticker = $StockSymbol;
+                var ticker = document.getElementById('ticker').value;
                 console.log($StockSymbol);
                 console.log(ticker);
                 var interval = document.getElementById('interval').value;
@@ -615,8 +166,10 @@ $CurrentTickerData = {};
 
 
                 case "lessthan":
+
+                console.log("less than called");
                 var url = "/lessthanData";
-                var ticker = StockSymbol;
+                var ticker = document.getElementById('ticker1').value;
                 var interval = document.getElementById('interval1').value;
                 var percent_change = document.getElementById('percent_change1').value;
                 var start_date = document.getElementById('start_date1').value;
@@ -647,7 +200,7 @@ $CurrentTickerData = {};
 
                 case "margin":
                 var url = "/marginData";
-                var ticker = StockSymbol;
+                var ticker = document.getElementById('ticker2').value;
                 var interval = document.getElementById('interval2').value;
                 var percent_change = document.getElementById('percent_change2').value;
                 var margin = document.getElementById('margin2').value;
@@ -683,7 +236,7 @@ $CurrentTickerData = {};
 
                 case "bestreturns":
                 var url = "/topreturnsData";    
-                var ticker = StockSymbol;
+                var ticker = document.getElementById('ticker3').value;
                 var interval = document.getElementById('interval3').value;
                 var number_of_returns = document.getElementById('number_of_returns3').value;
                 var start_date = document.getElementById('start_date3').value;
@@ -714,10 +267,10 @@ $CurrentTickerData = {};
 
                 case "worstreturns":
 
-                var ticker = StockSymbol;
+                var ticker = document.getElementById('ticker4').value;
                 var interval = document.getElementById('interval4').value;
                 var number_of_returns = document.getElementById('number_of_returns4').value;
-                var start_date = document.getElementById('start_date'4).value;
+                var start_date = document.getElementById('start_date4').value;
                 var end_date = document.getElementById('end_date4').value;
                 var url = "/bottomreturnsData";
                 if (ticker == null){
@@ -747,7 +300,7 @@ $CurrentTickerData = {};
 
                 case "sharpe":
                 var url = "/sharpeData";
-                var ticker = StockSymbol;
+                var ticker = document.getElementById('ticker5').value;
                 var risk_free_rate = document.getElementById('risk_free_rate5').value;
                 var start_date = document.getElementById('start_date5').value;
                 var end_date = document.getElementById('end_date5').value;
@@ -785,18 +338,93 @@ $CurrentTickerData = {};
         //Init puts AAPL as defailt in every class
         $( ".stonksymbol" ).val( "AAPL" );
         //Every change to ticker aka stock symbol synchronizes everywhere
+          //Retrieve user input
+       
 
-        StockSymbol = $( ".stonksymbol" ).val();
+        $StockSymbol = $( ".stonksymbol" ).val();
         
     //charts
+
+    </script>
+        
+</head>
+
+<style>
+body {font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif , sans-serif;}
+
+
+
+th, td, p, input, h3 {
+          /*header cell, data cell, paragraph, user enter data, size */
+            font:15px 'Segoe UI';
+        }
+        table, th, td {
+          /*table, header, data*/
+            border: solid 1px #ddd;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+
+        a {
+            color: white;
+        }
+</style>
+
+<body>   
+ <div class="header">
+
+ <!-- Nav tabs -->
+<div class="navbar-expand-md" style=" margin-bottom: 24px; color: green;">
+    <ul class="nav navbar nav-tabs navbar-nav nav-pills navbar-dark bg-secondary mb-3 nav-fill" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active navbar-brand" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Stonk Analyzer v0.1</a>
+    </li>
+
+    <li class="nav-item">
+        
+      <a class="nav-link" id="greaterthan-tab" data-toggle="tab" href="#greaterthan" role="tab" aria-controls="greaterthan" aria-selected="false">Greater Than</a>
+      </li>
+
+    <li class="nav-item">
+      <a class="nav-link" id="lessthan-tab" data-toggle="tab" href="#lessthan" role="tab" aria-controls="lessthan" aria-selected="false">Less Than</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="margin-tab" data-toggle="tab" href="#margin" role="tab" aria-controls="margin" aria-selected="false">Margin</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="bestreturns-tab" data-toggle="tab" href="#bestreturns" role="tab" aria-controls="bestreturns" aria-selected="false">Best Returns</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="worstreturns-tab" data-toggle="tab" href="#worstreturns" role="tab" aria-controls="worstreturns" aria-selected="false">Worst Returns</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="sharpe-tab" data-toggle="tab" href="#sharpe" role="tab" aria-controls="sharpe" aria-selected="false">Sharpe</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="sharpe-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare" aria-selected="false">Comparison</a>
+      </li>
+  </ul>
+    </div>
+</div>
+<div id="center" style="height:300px; width: 300px;">
+    <canvas id="myChart" width="200" height="200"></canvas>
+ </div>
+ <script>
+
     var ctx = document.getElementById('myChart').getContext('2d');
+
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: 'AAPL data',
+                data: [12, 19, 241, 5, 2, 3],
+
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',
@@ -826,7 +454,385 @@ $CurrentTickerData = {};
             }
         }
     });
-    </script>
+</script>
+
+<!-- Intro Modal -->
+<div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog .modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Welcome to Stonk Analyzer v0.1</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          There are too many Stonks listed on <strike>WallStreetBets</strike> Nasdaq. Which one should you choose to #YOLO your lifesavings in?
+
+          Lets find out.
+        </div>
+        <div class="modal-body">
+            Enter your favourite Stonk below, and see the results.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary"><a style="color:white" href="https://www.samhsa.gov/find-help/national-helpline">I have a gambling problem! Get me out of Here!</a></button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Tab panes -->
+
+<div class="tab-content">
+    <!-- Home -->
+    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="class">
+    
+        <h4 style="color:black">To begin, enter your Stonk Symbol here:</h4>
+        <div class="class-body">
+            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                How it works:
+              </a>
+          
+            <div class="collapse" id="collapseExample">
+              <div class="card card-body">
+                Enter your Stonks to see how they did.
+          
+                Then mortgage your house and YOLO call options.
+              </div>
+            </div>
+        </div>    
+        <div class="card-body input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Symbol</span>
+          </div>
+          <input type="text" class='stonkticker' class="form-control" value="AAPL">    
+        </div>     
+        <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
+    </div>
+    </div>
+    <!-- Greater Than -->
+    <div class="tab-pane" id="greaterthan" role="tabpanel" aria-labelledby="greaterthan-tab">
+        Greater THAN
+        <div class="card">
+            <div class="card-body" id='showGreaterThan'>
+            </div>  
+        </div>
+        <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Symbol</span>
+            </div>
+            <input type="text" id="ticker" class='form-control stonkticker'>    
+          </div>     
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+            </div>
+            <input type="number" class="form-control" aria-label="Interval" id="interval" aria-describedby="inputGroup-sizing-sm" value=1 required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
+            </div>
+            <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+            <input type="number" class="form-control" aria-label="Percent Change" id="percent_change" aria-describedby="inputGroup-sizing-sm" value=5 required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+            </div>
+            <input type="Date" class="form-control" aria-label="Start Date" id="start_date" aria-describedby="inputGroup-sizing-sm" value="12/01/2019" required>
+          </div>
+          
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+            </div>
+            <input type="Date" class="form-control" aria-label="End Date" id="end_date" aria-describedby="inputGroup-sizing-sm" value="12/01/2020" required>
+          </div>
+          <!-- drop down in html to select function -->
+          <!-- onclick caklls js submit -->
+          <br>
+          <!-- submit button -->
+          <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('greaterthan');">Submit</button>
+    
+    </div>
+    <!-- Less Than -->
+    <div class="tab-pane" id="lessthan" role="tabpanel" aria-labelledby="lessthan-tab">
+
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+<p id='showLessThan'></p>
+
+<h2>Less Than Function</h2>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Ticker" id="ticker1" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+  </div>
+  <input type="number" class="form-control" aria-label="Interval" id="interval1" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change1" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date1" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date1" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('lessthan');">Submit</button>
+<br>  
+<br>
+
+
+    </div>
+    <!-- Margin -->
+    <div class="tab-pane" id="margin" role="tabpanel" aria-labelledby="margin-tab">
+        <p id='showMargin'></p>
+        
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+<h2>Margin Function</h2>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Ticker" id="ticker2" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+  </div>
+  <input type="number" class="form-control" aria-label="Interval" id="interval2" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change2" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Margin</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Margin" id="margin2" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date2" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date2" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('margin');">Submit</button>
+<br>  
+<br>
+
+
+
+
+    </div>
+    <!-- Best returns -->
+    <div class="tab-pane" id="bestreturns" role="tabpanel" aria-labelledby="bestreturns-tab">
+        <p id='showBestReturns'></p>
+
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+<h2>Top Returns Function</h2>
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+  </div>
+  <input type="text" class="form-control" aria-label="Ticker" id="ticker3" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+  </div>
+  <input type="number" class="form-control" aria-label="Interval" id="interval3" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
+  </div>
+  <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+  <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns3" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date3" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+  <div class="input-group-prepend">
+    <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+  </div>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date3" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('bestreturns');">Submit</button>
+<br>  
+<br>
+
+
+
+    </div>
+    <!-- Worst Returns -->
+    <div class="tab-pane" id="worstreturns" role="tabpanel" aria-labelledby="worstreturns-tab">
+        
+    <p class="showresults" id='showWorstReturns'></p>
+
+        <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+        <h2>Worst Returns Function</h2>
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+        </div>
+        <input type="text" class="form-control" aria-label="Ticker" id="ticker4" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Interval" id="interval4" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
+        </div>
+        <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
+        <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns4" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+        </div>
+        <input type="Date" class="form-control" aria-label="Start Date" id="start_date4" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+
+        <div class="input-group input-group-sm mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+        </div>
+        <input type="Date" class="form-control" aria-label="End Date" id="end_date4" aria-describedby="inputGroup-sizing-sm" required>
+        </div>
+        <!-- drop down in html to select function -->
+        <!-- onclick caklls js submit -->
+        <br>
+        <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('worstreturns');">Submit</button>
+        <br>  
+        <br>
+
+
+
+    </div>
+    <!-- Annual Sharpe -->
+    <div class="tab-pane" id="sharpe" role="tabpanel" aria-labelledby="sharpe-tab">
+<div class="container-fluid">
+
+
+<!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
+<h2>Annualized Sharpe Ratio Function</h2>
+<div class="input-group input-group-sm mb-3">
+<div class="input-group-prepend">
+ <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+</div>
+<input type="text" class="form-control" aria-label="Ticker" id="ticker5" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+<div class="input-group-prepend">
+ <span class="input-group-text" id="inputGroup-sizing-sm">Risk Free Rate</span>
+</div>
+<input type="number" class="form-control" aria-label="Risk Free Rate" id="risk_free_rate5" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+<div class="input-group-prepend">
+ <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
+</div>
+<input type="Date" class="form-control" aria-label="Start Date" id="start_date5" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+
+<div class="input-group input-group-sm mb-3">
+<div class="input-group-prepend">
+ <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
+</div>
+<input type="Date" class="form-control" aria-label="End Date" id="end_date5" aria-describedby="inputGroup-sizing-sm" required>
+</div>
+<!-- drop down in html to select function -->
+<!-- onclick caklls js submit -->
+<br>
+<button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('sharpe');">Submit</button>
+<br>  
+<br>
+<p id='showSharpe'></p>
+
+
+
+
+</div>    
+    
+    </div>
+    <!-- Comparisons -->
+    <div class="tab-pane" id="compare" role="tabpanel" aria-labelledby="comparison-tab">...
+        Comparison
+
+    
+    </div>
+</div>
+<!--End of Tab Panes-->
+
 </body>
 
 </html>
