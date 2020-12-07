@@ -27,13 +27,27 @@ $SearchCache = [];
 $CurrentTickerData = {};
 
 
+//Stockticker update jquery
+$(function(ready){
+  $('#stonkticker').on('input', function() {
+    $StockSymbol = $('.ticker').val();
+    console.log($StockSymbol);
+  });
+});
+
+ 
+    function submitSymbol(){
+      populateTabs();
+
+    }
+
     //saves all prior searches to cache, so we can compare
     function saveTicker(){
         SearchCache[SearchCache.length] = CurrentTickerData;
     }
 
     function populateTabs(){
- 
+      $('.stonkticker').val($StockSymbol);
         //populate every single tab baby
         submit("greaterthan");
         submit("lessthan");
@@ -42,7 +56,7 @@ $CurrentTickerData = {};
         submit("worstreturns");
         submit("sharpe");
 
-        saveTicker();
+        // saveTicker();
     }
     
     
@@ -521,7 +535,7 @@ th, td, p, input, h3 {
                     <div class="input-group-prepend">
                       <span class="input-group-text">Symbol</span>
                     </div>
-                    <input type="text" class='stonkticker' class="form-control" value="AAPL">    
+                    <input type="text" id="stonkticker" class="ticker form-control" value="AAPL">    
                   </div>     
                   <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>   
               
@@ -633,14 +647,14 @@ th, td, p, input, h3 {
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
   </div>
-  <input type="text" class="form-control" aria-label="Ticker" id="ticker1" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="text" class="form-control stonkticker" aria-label="Ticker" id="ticker1" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
   </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval1" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Interval" id="interval1" aria-describedby="inputGroup-sizing-sm" value="1" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -648,21 +662,21 @@ th, td, p, input, h3 {
     <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
   </div>
   <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change1" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change1" aria-describedby="inputGroup-sizing-sm" value="1" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
   </div>
-  <input type="Date" class="form-control" aria-label="Start Date" id="start_date1" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date1" aria-describedby="inputGroup-sizing-sm" value="01/01/2017" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
   </div>
-  <input type="Date" class="form-control" aria-label="End Date" id="end_date1" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date1" aria-describedby="inputGroup-sizing-sm" value="01/01/2020" required>
 </div>
 <!-- drop down in html to select function -->
 <!-- onclick caklls js submit -->
@@ -700,14 +714,14 @@ th, td, p, input, h3 {
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
   </div>
-  <input type="text" class="form-control" aria-label="Ticker" id="ticker2" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="text" class="form-control stonkticker" aria-label="Ticker" id="ticker2" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
   </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval2" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Interval" id="interval2" value="2" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -715,7 +729,7 @@ th, td, p, input, h3 {
     <span class="input-group-text" id="inputGroup-sizing-sm">Percent Change</span>
   </div>
   <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change2" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Percent Change" id="percent_change2" value="3" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -723,21 +737,21 @@ th, td, p, input, h3 {
     <span class="input-group-text" id="inputGroup-sizing-sm">Margin</span>
   </div>
   <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Margin" id="margin2" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Margin" id="margin2" value="3" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
   </div>
-  <input type="Date" class="form-control" aria-label="Start Date" id="start_date2" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date2" value="01/01/2017" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
   </div>
-  <input type="Date" class="form-control" aria-label="End Date" id="end_date2" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date2" value="01/01/2020" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <!-- drop down in html to select function -->
@@ -781,14 +795,14 @@ th, td, p, input, h3 {
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
   </div>
-  <input type="text" class="form-control" aria-label="Ticker" id="ticker3" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="text" class="form-control stonkticker" aria-label="Ticker" id="ticker3" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
   </div>
-  <input type="number" class="form-control" aria-label="Interval" id="interval3" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Interval" id="interval3" value="1" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -796,21 +810,21 @@ th, td, p, input, h3 {
     <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
   </div>
   <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-  <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns3" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns3" value="10" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
   </div>
-  <input type="Date" class="form-control" aria-label="Start Date" id="start_date3" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="Date" class="form-control" aria-label="Start Date" id="start_date3" value="01/01/2017" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
   </div>
-  <input type="Date" class="form-control" aria-label="End Date" id="end_date3" aria-describedby="inputGroup-sizing-sm" required>
+  <input type="Date" class="form-control" aria-label="End Date" id="end_date3" value="01/01/2020" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 <!-- drop down in html to select function -->
 <!-- onclick caklls js submit -->
@@ -853,14 +867,14 @@ th, td, p, input, h3 {
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
         </div>
-        <input type="text" class="form-control" aria-label="Ticker" id="ticker4" aria-describedby="inputGroup-sizing-sm" required>
+        <input type="text" class="form-control stonkticker" aria-label="Ticker" id="ticker4" aria-describedby="inputGroup-sizing-sm" required>
         </div>
 
         <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Interval</span>
         </div>
-        <input type="number" class="form-control" aria-label="Interval" id="interval4" aria-describedby="inputGroup-sizing-sm" required>
+        <input type="number" class="form-control" aria-label="Interval" id="interval4" value="1" aria-describedby="inputGroup-sizing-sm" required>
         </div>
 
         <div class="input-group input-group-sm mb-3">
@@ -868,21 +882,21 @@ th, td, p, input, h3 {
             <span class="input-group-text" id="inputGroup-sizing-sm">Number of Returns</span>
         </div>
         <!-- LOOK UP TEXT TPYE AND NUMBERS  -->
-        <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns4" aria-describedby="inputGroup-sizing-sm" required>
+        <input type="number" class="form-control" aria-label="Number of Returns" id="number_of_returns4" value="10" aria-describedby="inputGroup-sizing-sm" required>
         </div>
 
         <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
         </div>
-        <input type="Date" class="form-control" aria-label="Start Date" id="start_date4" aria-describedby="inputGroup-sizing-sm" required>
+        <input type="Date" class="form-control" aria-label="Start Date" id="start_date4" value="01/01/2017" aria-describedby="inputGroup-sizing-sm" required>
         </div>
 
         <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
         </div>
-        <input type="Date" class="form-control" aria-label="End Date" id="end_date4" aria-describedby="inputGroup-sizing-sm" required>
+        <input type="Date" class="form-control" aria-label="End Date" id="end_date4" value="01/01/2020" aria-describedby="inputGroup-sizing-sm" required>
         </div>
         <!-- drop down in html to select function -->
         <!-- onclick caklls js submit -->
@@ -925,30 +939,30 @@ th, td, p, input, h3 {
 </div>
 <div class="input-group input-group-sm mb-3">
 <div class="input-group-prepend">
- <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
+ <span class="input-group-text stonkticker" id="inputGroup-sizing-sm">Ticker</span>
 </div>
-<input type="text" class="form-control" aria-label="Ticker" id="ticker5" aria-describedby="inputGroup-sizing-sm" required>
+<input type="text" class="form-control stonkticker" aria-label="Ticker" id="ticker5" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
 <div class="input-group-prepend">
  <span class="input-group-text" id="inputGroup-sizing-sm">Risk Free Rate</span>
 </div>
-<input type="number" class="form-control" aria-label="Risk Free Rate" id="risk_free_rate5" aria-describedby="inputGroup-sizing-sm" required>
+<input type="number" class="form-control" aria-label="Risk Free Rate" id="risk_free_rate5" value="2" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
 <div class="input-group-prepend">
  <span class="input-group-text" id="inputGroup-sizing-sm">Start Date</span>
 </div>
-<input type="Date" class="form-control" aria-label="Start Date" id="start_date5" aria-describedby="inputGroup-sizing-sm" required>
+<input type="Date" class="form-control" aria-label="Start Date" id="start_date5" value="01/01/2017" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 
 <div class="input-group input-group-sm mb-3">
 <div class="input-group-prepend">
  <span class="input-group-text" id="inputGroup-sizing-sm">End Date</span>
 </div>
-<input type="Date" class="form-control" aria-label="End Date" id="end_date5" aria-describedby="inputGroup-sizing-sm" required>
+<input type="Date" class="form-control" aria-label="End Date" id="end_date5" value="01/01/2020" aria-describedby="inputGroup-sizing-sm" required>
 </div>
 <!-- drop down in html to select function -->
 <!-- onclick caklls js submit -->
