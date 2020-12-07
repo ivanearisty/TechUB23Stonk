@@ -14,333 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.min.js" integrity="sha512-SuxO9djzjML6b9w9/I07IWnLnQhgyYVSpHZx0JV97kGBfTIsUYlWflyuW4ypnvhBrslz1yJ3R+S14fdCWmSmSA==" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.css" integrity="sha512-/zs32ZEJh+/EO2N1b0PEdoA10JkdC3zJ8L5FTiQu82LR9S/rOQNfQN7U59U9BC12swNeRAz3HSzIL2vpp4fv3w==" crossorigin="anonymous">
 <script>  
-//app logic goes here
-//tutorial Modal trigger
-$(window).on('load',function(){
-        $('#introModal').modal('show');
-    });
 
-//Global Stomk, Data, and past data
-var $StockSymbol = "AAPL";
-console.log("StockSYmbol Initialized " + $StockSymbol);
-var $SearchCache = [];
-var $CurrentTickerData = {};
-var TestChart = new Chart();
-console.log(TestChart);
-
-    //saves all prior searches to cache, so we can compare
-    function saveTicker(){
-        SearchCache[SearchCache.length] = CurrentTickerData;
-    }
-
-    function populateTabs(){
- 
-        //populate every single tab baby
-        submit("greaterthan");
-        submit("lessthan");
-        submit("margin");
-        submit("bestreturns");
-        submit("worstreturns");
-        submit("sharpe");
-
-        saveTicker();
-    }
-    
-    
-    //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
-    
-    //aray of json objects with values 
-    function tableFromJson(data, destination) { //table to display output of function 
-        var col = [];  //declare variable column
-        for (var i = 0; i < data.length; i++) { //length of varialbe + 1
-            for (var key in data[i]) {
-                if (col.indexOf(key) === -1) { //1st index where element can be found in an array, equal value and equal type
-                    col.push(key); //add items to array
-                }
-            }
-        }
-    
-        // Create a table.
-        var table = document.createElement("table"); //create table
-    
-        // Create table header row using the extracted headers above.
-        var tr = table.insertRow(-1);                   // table row.
-    
-        for (var i = 0; i < col.length; i++) {
-            var th = document.createElement("th");      // ceate table header.
-            th.innerHTML = col[i];
-            tr.appendChild(th);
-        }
-    
-        // add json data to the table as rows.
-        for (var i = 0; i < data.length; i++) {
-    
-            tr = table.insertRow(-1);
-    
-            for (var j = 0; j < col.length; j++) {
-                var tabCell = tr.insertCell(-1);  //insert new cell with content at beginning of table row
-                tabCell.innerHTML = data[i][col[j]];
-            }
-        }
-    
-        // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
-        var divShowData = document.getElementById(destination); //returns an element object whose id property matches the specified string 
-        divShowData.innerHTML = "";
-        divShowData.appendChild(table);
-
-    }
-
-        
-        function sendSubmit(url, postData, destination) {
-            console.log("send submit running");  
-            console.log(postData);
-          $.ajax({ //send data to web server 
-              url: url, //url to send request to 
-              type: 'POST', //type of request 
-              dataType: 'json', //datatype expected with server response 
-              async: false, //request shouldn't be handled asynchronous- statement calling must complete before next statement is called 
-              data: JSON.stringify(postData), //data to be sent to server- will be sent as a string 
-              contentType: "application/json; charset=UTF-8" //content type when sending data to the server 
-            })
-            .done(function(data) { // data will be here
-               // $CurrentTickerData[destination] = data;
-                console.log(data);
-                tableFromJson(data, destination);
-              return true;
-            })
-            .fail(function(err) {
-                alert("API call failed")
-              return false;
-            })
-            .always(function(info) {
-              // alert();
-              return "failed";
-            });
-          return true;
-        };
-        
-        
-          function submit(type){
-              console.log("submit running");
-              console.log($StockSymbol);
-            switch(type){
-
-                case "greaterthan":
-//              var ticker = document.getElementById('ticker').value;
-
-                var ticker = $StockSymbol;
-                console.log($StockSymbol);
-                console.log(ticker);
-                var interval = document.getElementById('interval').value;
-                var percent_change = document.getElementById('percent_change').value;
-                var start_date = document.getElementById('start_date').value;
-                var end_date = document.getElementById('end_date').value;
-                var url = "/greaterthanData";
-
-                if (ticker == null){
-                    console.log("tickernull");
-                alert("Please enter text");
-                return;
-                }
-                if (interval == null){
-                    console.log("intervalnull");
-                alert("Please enter text");
-                return;
-                }
-                if (percent_change == null){
-                    console.log("percnull");
-                alert("Please enter text");
-                return;
-                } 
-                if (start_date == null){
-                    console.log("startnull");
-                alert("Please enter text");
-                return;
-                }  
-                if (end_date == null){
-                    console.log("endnull");
-                alert("Please enter text");
-                return;
-                } 
-                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date}), "showGreaterThan"); //type : drop down cvalue 
-                
-                break;
-
-
-                case "lessthan":
-                var url = "/lessthanData";
-                var ticker = StockSymbol;
-                var interval = document.getElementById('interval1').value;
-                var percent_change = document.getElementById('percent_change1').value;
-                var start_date = document.getElementById('start_date1').value;
-                var end_date = document.getElementById('end_date1').value;
-                if (ticker == null){
-                alert("Please enter text");
-                return;
-                }
-                if (interval == null){
-                alert("Please enter text");
-                return;
-                }
-                if (percent_change == null){
-                alert("Please enter text");
-                return;
-                } 
-                if (start_date == null){
-                alert("Please enter text");
-                return;
-                }  
-                if (end_date == null){
-                alert("Please enter text");
-                return;
-                } 
-                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date}), "showLessThan"); //type : drop down cvalue 
-                            break;
-
-
-                case "margin":
-                var url = "/marginData";
-                var ticker = StockSymbol;
-                var interval = document.getElementById('interval2').value;
-                var percent_change = document.getElementById('percent_change2').value;
-                var margin = document.getElementById('margin2').value;
-                var start_date = document.getElementById('start_date2').value;
-                var end_date = document.getElementById('end_date2').value;
-                if (ticker == null){
-                alert("Please enter text");
-                return;
-                }
-                if (interval == null){
-                alert("Please enter text");
-                return;
-                }
-                if (percent_change == null){
-                alert("Please enter text");
-                return;
-                }   
-                if (margin == null){
-                alert("Please enter text");
-                return;
-                }
-                if (start_date == null){
-                alert("Please enter text");
-                return;
-                }  
-                if (end_date == null){
-                alert("Please enter text");
-                return;
-                }    
-                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, margin: margin, start_date: start_date, end_date: end_date}), "showMargin"); //type : drop down value 
-                break;
-
-
-                case "bestreturns":
-                var url = "/topreturnsData";    
-                var ticker = StockSymbol;
-                var interval = document.getElementById('interval3').value;
-                var number_of_returns = document.getElementById('number_of_returns3').value;
-                var start_date = document.getElementById('start_date3').value;
-                var end_date = document.getElementById('end_date3').value;
-                if (ticker == null){
-                alert("Please enter text");
-                return;
-                }
-                if (interval == null){
-                alert("Please enter text");
-                return;
-                }
-                if (number_of_returns == null){
-                alert("Please enter text");
-                return;
-                } 
-                if (start_date == null){
-                alert("Please enter text");
-                return;
-                }  
-                if (end_date == null){
-                alert("Please enter text");
-                return;
-                } 
-                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, number_of_returns: number_of_returns, start_date: start_date, end_date: end_date}), "showBestReturns"); //type : drop down cvalue     
-                break;
-
-
-                case "worstreturns":
-
-                var ticker = StockSymbol;
-                var interval = document.getElementById('interval4').value;
-                var number_of_returns = document.getElementById('number_of_returns4').value;
-                var start_date = document.getElementById('start_date'4).value;
-                var end_date = document.getElementById('end_date4').value;
-                var url = "/bottomreturnsData";
-                if (ticker == null){
-                alert("Please enter text");
-                return;
-                }
-                if (interval == null){
-                alert("Please enter text");
-                return;
-                }
-                if (number_of_returns == null){
-                alert("Please enter text");
-                return;
-                } 
-                if (start_date == null){
-                alert("Please enter text");
-                return;
-                }  
-                if (end_date == null){
-                alert("Please enter text");
-                return;
-                } 
-                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, number_of_returns: number_of_returns, start_date: start_date, end_date: end_date}), "showWorstReturns"); //type : drop down cvalue 
-            
-                break;
-
-
-                case "sharpe":
-                var url = "/sharpeData";
-                var ticker = StockSymbol;
-                var risk_free_rate = document.getElementById('risk_free_rate5').value;
-                var start_date = document.getElementById('start_date5').value;
-                var end_date = document.getElementById('end_date5').value;
-                if (ticker == null){
-                alert("Please enter text");
-                return;
-                }
-                if (risk_free_rate == null){
-                alert("Please enter text");
-                return;
-                }
-                if (start_date == null){
-                alert("Please enter text");
-                return;
-                }  
-                if (end_date == null){
-                alert("Please enter text");
-                return;
-                } 
-                sendSubmit(url, JSON.stringify({ticker: ticker, risk_free_rate: risk_free_rate, start_date: start_date, end_date: end_date}),"showSharpe"); //type : drop down cvalue 
-            
-                break;    
-
-                default:
-                return;   
-            }
-            
-         
-          }
-        
-        
-        // how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
-        //In html add a drop down to selct the mehtod. add value to json. Send to server. Server will look at this value in an iff statement and selct the correct method. "{"ttypekl": above"}. Then based on the tpye you will get the correct repsonse. This will be the data in the send sumbit. So used data variable and html json code 
-        //Jquery shit
-        //Init puts AAPL as defailt in every class
-        $( ".stonksymbol" ).val( "AAPL" );
-        //Every change to ticker aka stock symbol synchronizes everywhere
-
-        StockSymbol = $( ".stonksymbol" ).val();
-        
 </script>
         
 </head>
@@ -408,45 +82,7 @@ th, td, p, input, h3 {
 </div>
 <div id="center" style="height:600px; width: 600px;">
     <canvas id="myChart" width="200" height="200"></canvas>
-    <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-    </script>
+    
  </div>
 
 <!-- Intro Modal -->
@@ -825,6 +461,372 @@ th, td, p, input, h3 {
     </div>
 </div>
 <!--End of Tab Panes-->
+<script>
+    //app logic goes here
+//tutorial Modal trigger
+$(window).on('load',function(){
+        $('#introModal').modal('show');
+    });
 
+//Global Stomk, Data, and past data
+$StockSymbol = "AAPL";
+console.log("StockSYmbol Initialized " + $StockSymbol);
+$SearchCache = [];
+$CurrentTickerData = {};
+
+
+    //saves all prior searches to cache, so we can compare
+    function saveTicker(){
+        SearchCache[SearchCache.length] = CurrentTickerData;
+    }
+
+    function populateTabs(){
+ 
+        //populate every single tab baby
+        submit("greaterthan");
+        submit("lessthan");
+        submit("margin");
+        submit("bestreturns");
+        submit("worstreturns");
+        submit("sharpe");
+
+        saveTicker();
+    }
+    
+    
+    //https://www.encodedna.com/javascript/populate-json-data-to-html-table-using-javascript.htm
+    
+    //aray of json objects with values 
+    function tableFromJson(data, destination) { //table to display output of function 
+        var col = [];  //declare variable column
+        for (var i = 0; i < data.length; i++) { //length of varialbe + 1
+            for (var key in data[i]) {
+                if (col.indexOf(key) === -1) { //1st index where element can be found in an array, equal value and equal type
+                    col.push(key); //add items to array
+                }
+            }
+        }
+    
+        // Create a table.
+        var table = document.createElement("table"); //create table
+    
+        // Create table header row using the extracted headers above.
+        var tr = table.insertRow(-1);                   // table row.
+    
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // ceate table header.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+    
+        // add json data to the table as rows.
+        for (var i = 0; i < data.length; i++) {
+    
+            tr = table.insertRow(-1);
+    
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);  //insert new cell with content at beginning of table row
+                tabCell.innerHTML = data[i][col[j]];
+            }
+        }
+    
+        // Now, add the newly created table with json data, to a container- layout element in Bootstrap.
+        var divShowData = document.getElementById(destination); //returns an element object whose id property matches the specified string 
+        divShowData.innerHTML = "";
+        divShowData.appendChild(table);
+
+    }
+
+        
+        function sendSubmit(url, postData, destination) {
+            console.log("send submit running");  
+            console.log(postData);
+          $.ajax({ //send data to web server 
+              url: url, //url to send request to 
+              type: 'POST', //type of request 
+              dataType: 'json', //datatype expected with server response 
+              async: false, //request shouldn't be handled asynchronous- statement calling must complete before next statement is called 
+              data: JSON.stringify(postData), //data to be sent to server- will be sent as a string 
+              contentType: "application/json; charset=UTF-8" //content type when sending data to the server 
+            })
+            .done(function(data) { // data will be here
+               // $CurrentTickerData[destination] = data;
+                console.log(data);
+                tableFromJson(data, destination);
+              return true;
+            })
+            .fail(function(err) {
+                alert("API call failed")
+              return false;
+            })
+            .always(function(info) {
+              // alert();
+              return "failed";
+            });
+          return true;
+        };
+        
+        
+          function submit(type){
+              console.log("submit running");
+              console.log($StockSymbol);
+            switch(type){
+
+                case "greaterthan":
+//              var ticker = document.getElementById('ticker').value;
+
+                var ticker = $StockSymbol;
+                console.log($StockSymbol);
+                console.log(ticker);
+                var interval = document.getElementById('interval').value;
+                var percent_change = document.getElementById('percent_change').value;
+                var start_date = document.getElementById('start_date').value;
+                var end_date = document.getElementById('end_date').value;
+                var url = "/greaterthanData";
+
+                if (ticker == null){
+                    console.log("tickernull");
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                    console.log("intervalnull");
+                alert("Please enter text");
+                return;
+                }
+                if (percent_change == null){
+                    console.log("percnull");
+                alert("Please enter text");
+                return;
+                } 
+                if (start_date == null){
+                    console.log("startnull");
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                    console.log("endnull");
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date}), "showGreaterThan"); //type : drop down cvalue 
+                
+                break;
+
+
+                case "lessthan":
+                var url = "/lessthanData";
+                var ticker = StockSymbol;
+                var interval = document.getElementById('interval1').value;
+                var percent_change = document.getElementById('percent_change1').value;
+                var start_date = document.getElementById('start_date1').value;
+                var end_date = document.getElementById('end_date1').value;
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                alert("Please enter text");
+                return;
+                }
+                if (percent_change == null){
+                alert("Please enter text");
+                return;
+                } 
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, start_date: start_date, end_date: end_date}), "showLessThan"); //type : drop down cvalue 
+                            break;
+
+
+                case "margin":
+                var url = "/marginData";
+                var ticker = StockSymbol;
+                var interval = document.getElementById('interval2').value;
+                var percent_change = document.getElementById('percent_change2').value;
+                var margin = document.getElementById('margin2').value;
+                var start_date = document.getElementById('start_date2').value;
+                var end_date = document.getElementById('end_date2').value;
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                alert("Please enter text");
+                return;
+                }
+                if (percent_change == null){
+                alert("Please enter text");
+                return;
+                }   
+                if (margin == null){
+                alert("Please enter text");
+                return;
+                }
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                }    
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, percent_change: percent_change, margin: margin, start_date: start_date, end_date: end_date}), "showMargin"); //type : drop down value 
+                break;
+
+
+                case "bestreturns":
+                var url = "/topreturnsData";    
+                var ticker = StockSymbol;
+                var interval = document.getElementById('interval3').value;
+                var number_of_returns = document.getElementById('number_of_returns3').value;
+                var start_date = document.getElementById('start_date3').value;
+                var end_date = document.getElementById('end_date3').value;
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                alert("Please enter text");
+                return;
+                }
+                if (number_of_returns == null){
+                alert("Please enter text");
+                return;
+                } 
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, number_of_returns: number_of_returns, start_date: start_date, end_date: end_date}), "showBestReturns"); //type : drop down cvalue     
+                break;
+
+
+                case "worstreturns":
+
+                var ticker = StockSymbol;
+                var interval = document.getElementById('interval4').value;
+                var number_of_returns = document.getElementById('number_of_returns4').value;
+                var start_date = document.getElementById('start_date'4).value;
+                var end_date = document.getElementById('end_date4').value;
+                var url = "/bottomreturnsData";
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (interval == null){
+                alert("Please enter text");
+                return;
+                }
+                if (number_of_returns == null){
+                alert("Please enter text");
+                return;
+                } 
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, interval: interval, number_of_returns: number_of_returns, start_date: start_date, end_date: end_date}), "showWorstReturns"); //type : drop down cvalue 
+            
+                break;
+
+
+                case "sharpe":
+                var url = "/sharpeData";
+                var ticker = StockSymbol;
+                var risk_free_rate = document.getElementById('risk_free_rate5').value;
+                var start_date = document.getElementById('start_date5').value;
+                var end_date = document.getElementById('end_date5').value;
+                if (ticker == null){
+                alert("Please enter text");
+                return;
+                }
+                if (risk_free_rate == null){
+                alert("Please enter text");
+                return;
+                }
+                if (start_date == null){
+                alert("Please enter text");
+                return;
+                }  
+                if (end_date == null){
+                alert("Please enter text");
+                return;
+                } 
+                sendSubmit(url, JSON.stringify({ticker: ticker, risk_free_rate: risk_free_rate, start_date: start_date, end_date: end_date}),"showSharpe"); //type : drop down cvalue 
+            
+                break;    
+
+                default:
+                return;   
+            }
+            
+         
+          }
+        
+        
+        // how to display json as html table using javacript. It will place the content of the json in an HTML table so it looks nice. You should change the ate rewmove 00:00:00. 
+        //In html add a drop down to selct the mehtod. add value to json. Send to server. Server will look at this value in an iff statement and selct the correct method. "{"ttypekl": above"}. Then based on the tpye you will get the correct repsonse. This will be the data in the send sumbit. So used data variable and html json code 
+        //Jquery shit
+        //Init puts AAPL as defailt in every class
+        $( ".stonksymbol" ).val( "AAPL" );
+        //Every change to ticker aka stock symbol synchronizes everywhere
+
+        StockSymbol = $( ".stonksymbol" ).val();
+        
+    //charts
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            datasets: [{
+                label: '# of Votes',
+                data: [12, 19, 3, 5, 2, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    </script>
 </body>
+
 </html>
