@@ -75,7 +75,7 @@ def check_percent_greater_by_date_timeframe(ticker, interval, percent_change, st
     df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100 #"5. adjusted close is column name- retreive percent change for certain interval "
     df_sub = df.loc[start_date:end_date] #dataframe of only start date to end date 
     df_sub = df_sub.loc[(df['returns']) >= percent_change, :] #only returns > than certain percent
-    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict() #sort index by date
+    df_sub = df_sub[["returns"]].sort_index().to_dict() #sort index by date
     final_dict = df_sub['returns'] #date and return- no nested dictionairy
     a = {}
     for i in final_dict:
@@ -106,7 +106,7 @@ def check_percent_less_by_date_timeframe(ticker, interval, percent_change, start
     df_sub = df.loc[start_date:end_date]
     df_sub = df_sub.loc[(df['returns']) <= percent_change, :]
     # return df_sub[["returns"]].sort_index()
-    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
+    df_sub = df_sub[["returns"]].sort_index().to_dict()
     final_dict = df_sub['returns']
     a = {}
     for i in final_dict:
@@ -138,7 +138,7 @@ def percent_change_margin_by_date_timeframe(ticker, interval, percent_change, ma
     df_sub = df_sub[(df["returns"] < percent_change+margin) &
                     (df["returns"] > percent_change-margin)]  # defining returns you want
     # sort values by date  #sort_values(["returns"])
-    df_sub = df_sub[["returns"]].sort_index(ascending=False).to_dict()
+    df_sub = df_sub[["returns"]].sort_index().to_dict()
     final_dict = df_sub['returns']
     a = {}
     for i in final_dict:
@@ -167,7 +167,7 @@ def top_N_returns(ticker, interval, number_of_returns, start_date, end_date):
     df = df.sort_index()
     df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
     df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_values(["returns"], ascending=False)
+    df_sub = df_sub.sort_index() #sort_values(["returns"], ascending=False)
     df_sub = df_sub[["returns"]].head(number_of_returns).to_dict() # series of the returns 
     final_dict = df_sub['returns']
     a = {}
@@ -198,7 +198,7 @@ def bottom_N_returns(ticker, interval, number_of_returns, start_date, end_date):
     df = df.sort_index()
     df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
     df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_values(["returns"])
+    df_sub = df_sub.sort_index() #sort_values(["returns"])
     df_sub = df_sub[["returns"]].head(number_of_returns).to_dict()  # series of the returns
     final_dict = df_sub['returns']
     a = {}
