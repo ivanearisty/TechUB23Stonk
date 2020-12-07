@@ -224,8 +224,7 @@ def sharpe_data(name=""):
 # annualized returns, volatility, and sharpe over a certain timeframe
 #@app.route('/ReturnsInfo/<ticker>/<start_date>/<end_date>')
 def return_info(ticker, risk_free_rate, start_date, end_date): #return of investment relative to risk- 
-    assert pd.to_datetime(start_date) < pd.to_datetime(
-        end_date), "start_date must eb less than end_date"  # make sure start date < end date
+    assert pd.to_datetime(start_date) < pd.to_datetime(end_date) #"start_date must eb less than end_date"  # make sure start date < end date
     df = TimeSeries(key='HY5IIUWSUZSBEEU5', output_format='pandas').get_daily_adjusted(
         ticker, outputsize='full')[0]  # 1st input of list
     df = df.sort_index()  # sort based on date
