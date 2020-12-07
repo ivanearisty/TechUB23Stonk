@@ -88,7 +88,7 @@ $CurrentTickerData = {};
         divShowData.appendChild(table);
 
     }
-
+    $GreaterThanData
         
         function sendSubmit(url, postData, destination) {
             console.log("send submit running");  
@@ -105,6 +105,36 @@ $CurrentTickerData = {};
                // $CurrentTickerData[destination] = data;
                 console.log(data);
                 tableFromJson(data, destination);
+                var labels = [];
+                var datapoint = [];
+                for(var x=0;x<data.length;x++){
+                    labels.push(data[x]["Date"]);
+                    datapoint.push(data[x]["Percent Change"]);
+                }
+                console.log("desti"+destination);
+
+                    var ctx = document.getElementById(destination+'Chart').getContext('2d');
+
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                            { 
+                                label: url,
+                                data: datapoint,
+                                backgroundColor: "white",
+                                borderColor: "green",
+                                fill: false,
+                                lineTension: 0,
+                                radius: 3
+                            }
+                            ]
+                        }
+                    });
+
+
+
               return true;
             })
             .fail(function(err) {
@@ -410,52 +440,6 @@ th, td, p, input, h3 {
   </ul>
     </div>
 </div>
-<div id="center" style="height:300px; width: 300px;">
-    <canvas id="myChart" width="200" height="200"></canvas>
- </div>
- <script>
-
-    var ctx = document.getElementById('myChart').getContext('2d');
-
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-            datasets: [{
-                label: 'AAPL data',
-                data: [12, 19, 241, 5, 2, 3],
-
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-</script>
-
 <!-- Intro Modal -->
 <div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog .modal-dialog-centered" role="document">
@@ -516,6 +500,9 @@ th, td, p, input, h3 {
     <div class="tab-pane" id="greaterthan" role="tabpanel" aria-labelledby="greaterthan-tab">
         Greater THAN
         <div class="card">
+            <div id="center" style="height:400px; width: 600px;">
+                <canvas id="showGreaterThanChart" width="600" height="300"></canvas>
+             </div>
             <div class="card-body" id='showGreaterThan'>
             </div>  
         </div>
@@ -565,7 +552,13 @@ th, td, p, input, h3 {
     <div class="tab-pane" id="lessthan" role="tabpanel" aria-labelledby="lessthan-tab">
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<p id='showLessThan'></p>
+<div class="card">
+    <div id="center" style="height:400px; width: 600px;">
+        <canvas id="showLessThanChart" width="600" height="300"></canvas>
+     </div>
+    <div class="card-body" id='showLessThan'>
+    </div>  
+</div>
 
 <h2>Less Than Function</h2>
 <div class="input-group input-group-sm mb-3">
@@ -614,7 +607,13 @@ th, td, p, input, h3 {
     </div>
     <!-- Margin -->
     <div class="tab-pane" id="margin" role="tabpanel" aria-labelledby="margin-tab">
-        <p id='showMargin'></p>
+        <div class="card">
+            <div id="center" style="height:400px; width: 600px;">
+                <canvas id="showMarginChart" width="600" height="300"></canvas>
+             </div>
+            <div class="card-body" id='showMargin'>
+            </div>  
+        </div>
         
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
 <h2>Margin Function</h2>
@@ -675,11 +674,17 @@ th, td, p, input, h3 {
     </div>
     <!-- Best returns -->
     <div class="tab-pane" id="bestreturns" role="tabpanel" aria-labelledby="bestreturns-tab">
-        <p id='showBestReturns'></p>
+        <div class="card">
+            <div id="center" style="height:400px; width: 600px;">
+                <canvas id="showBestReturnsChart" width="600" height="300"></canvas>
+             </div>
+            <div class="card-body" id='showBestReturns'>
+            </div>  
+        </div>
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
 <h2>Top Returns Function</h2>
-<div class="input-group input-group-sm mb-3">
+<div class="input-group input-group-sm mb-3">   
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
   </div>
@@ -726,8 +731,14 @@ th, td, p, input, h3 {
     </div>
     <!-- Worst Returns -->
     <div class="tab-pane" id="worstreturns" role="tabpanel" aria-labelledby="worstreturns-tab">
-        
-    <p class="showresults" id='showWorstReturns'></p>
+
+    <div class="card">
+        <div id="center" style="height:400px; width: 600px;">
+            <canvas id="showWorstReturnsChart" width="600" height="300"></canvas>
+         </div>
+        <div class="card-body" id='showWorstReturns'>
+        </div>  
+    </div>
 
         <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
         <h2>Worst Returns Function</h2>
@@ -783,6 +794,15 @@ th, td, p, input, h3 {
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
 <h2>Annualized Sharpe Ratio Function</h2>
+
+<div class="card">
+    <div id="center" style="height:400px; width: 600px;">
+        <canvas id="showSharpeChart" width="600" height="300"></canvas>
+     </div>
+    <div class="card-body" id='showSharpe'>
+    </div>  
+</div>
+
 <div class="input-group input-group-sm mb-3">
 <div class="input-group-prepend">
  <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -814,11 +834,6 @@ th, td, p, input, h3 {
 <!-- onclick caklls js submit -->
 <br>
 <button type="button" class="btn btn-primary btn-lg btn-block" onclick="submit('sharpe');">Submit</button>
-<br>  
-<br>
-<p id='showSharpe'></p>
-
-
 
 
 </div>    
