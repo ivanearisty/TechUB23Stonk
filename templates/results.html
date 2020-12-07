@@ -88,7 +88,6 @@ $CurrentTickerData = {};
         divShowData.appendChild(table);
 
     }
-    $GreaterThanData
         
         function sendSubmit(url, postData, destination) {
             console.log("send submit running");  
@@ -118,17 +117,21 @@ $CurrentTickerData = {};
                 console.log("desti"+destination);
                 
 
-                    var ctx = document.getElementById(destination+'Chart').getContext('2d');
+                var ctx = document.getElementById(destination+'Chart').getContext('2d');
 
+                var charttype = 'line';
+                if(destination == 'showSharpe' ){
+                    charttype = 'bar'
+                }
                     var myChart = new Chart(ctx, {
-                        type: 'line',
+                        type: charttype,
                         data: {
                             labels: labels,
                             datasets: [
                             { 
                                 label: url,
                                 data: datapoint,
-                                backgroundColor: "white",
+                                backgroundColor: "red",
                                 borderColor: "green",
                                 fill: false,
                                 lineTension: 0,
@@ -407,6 +410,11 @@ th, td, p, input, h3 {
         a {
             color: white;
         }
+        .v-center{
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+        }
 </style>
 
 <body>   
@@ -473,14 +481,15 @@ th, td, p, input, h3 {
 
 <!-- Tab panes -->
 
-<div class="tab-content text-center ">
+<div class="tab-content text-center">
     <!-- Home -->
     <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="card align-middle .flex-row">
+        
+        <div class="row card align-middle .flex-row .v-center">
             <div class="card-header">
                 <h4 style="color:black">To begin, enter your Stonk Symbol here:</h4>
             </div>
-            <div class="card-body align-middle ">
+            <div class="card-body align-middle .d-inline-flex" >
                 <div class="class-body">
                     <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
                         How it works:
@@ -516,16 +525,30 @@ th, td, p, input, h3 {
     </div>
     <!-- Greater Than -->
     <div class="tab-pane" id="greaterthan" role="tabpanel" aria-labelledby="greaterthan-tab">
+        <div class="row" style="margin:18px;">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Chart</h5>
+                  <div id="center" style="height:400px; width: 600px;">
+                    <canvas id="showGreaterThanChart" width="600" height="300"></canvas>
+                 </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Results</h5>
+                  <div class="card-body" id='showGreaterThan'>
+                </div>  
+                </div>
+              </div>
+            </div>
+        </div>
 
-        Greater THAN
-        <div class="card">
-            <div id="center" style="height:400px; width: 600px;">
-                <canvas id="showGreaterThanChart" width="600" height="300"></canvas>
-             </div>
+    
 
-            <div class="card-body" id='showGreaterThan'>
-            </div>  
-        </div> -->
         <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text">Ticker</span>
@@ -572,15 +595,28 @@ th, td, p, input, h3 {
     <div class="tab-pane" id="lessthan" role="tabpanel" aria-labelledby="lessthan-tab">
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<div class="card">
-    <div id="center" style="height:400px; width: 600px;">
-        <canvas id="showLessThanChart" width="600" height="300"></canvas>
-     </div>
-    <div class="card-body" id='showLessThan'>
-    </div>  
-</div>
-
-<h2>Less Than Function</h2>
+<div class="tab-pane" id="greaterthan" role="tabpanel" aria-labelledby="greaterthan-tab">
+    <div class="row" style="margin:18px;">
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Chart</h5>
+              <div id="center" style="height:400px; width: 600px;">
+                <canvas id="showLessThanChart" width="600" height="300"></canvas>
+             </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Results</h5>
+              <div class="card-body" id='showLessThan'>
+            </div>  
+            </div>
+          </div>
+        </div>
+    </div>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -627,16 +663,29 @@ th, td, p, input, h3 {
     </div>
     <!-- Margin -->
     <div class="tab-pane" id="margin" role="tabpanel" aria-labelledby="margin-tab">
-        <div class="card">
-            <div id="center" style="height:400px; width: 600px;">
-                <canvas id="showMarginChart" width="600" height="300"></canvas>
-             </div>
-            <div class="card-body" id='showMargin'>
-            </div>  
+        <div class="row" style="margin:18px;">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Chart</h5>
+                  <div id="center" style="height:400px; width: 600px;">
+                    <canvas id="showMarginChart" width="600" height="300"></canvas>
+                 </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Results</h5>
+                  <div class="card-body" id='showMargin'>
+                </div>  
+                </div>
+              </div>
+            </div>
         </div>
         
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Margin Function</h2>
 <div class="input-group input-group-sm mb-3">
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -694,16 +743,29 @@ th, td, p, input, h3 {
     </div>
     <!-- Best returns -->
     <div class="tab-pane" id="bestreturns" role="tabpanel" aria-labelledby="bestreturns-tab">
-        <div class="card">
-            <div id="center" style="height:400px; width: 600px;">
-                <canvas id="showBestReturnsChart" width="600" height="300"></canvas>
-             </div>
-            <div class="card-body" id='showBestReturns'>
-            </div>  
+        <div class="row" style="margin:18px;">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Chart</h5>
+                  <div id="center" style="height:400px; width: 600px;">
+                    <canvas id="showBestReturnsChart" width="600" height="300"></canvas>
+                 </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Results</h5>
+                  <div class="card-body" id='showBestReturns'>
+                </div>  
+                </div>
+              </div>
+            </div>
         </div>
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Top Returns Function</h2>
 <div class="input-group input-group-sm mb-3">   
   <div class="input-group-prepend">
     <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -752,16 +814,30 @@ th, td, p, input, h3 {
     <!-- Worst Returns -->
     <div class="tab-pane" id="worstreturns" role="tabpanel" aria-labelledby="worstreturns-tab">
 
-    <div class="card">
-        <div id="center" style="height:400px; width: 600px;">
-            <canvas id="showWorstReturnsChart" width="600" height="300"></canvas>
-         </div>
-        <div class="card-body" id='showWorstReturns'>
-        </div>  
-    </div>
+        <div class="row" style="margin:18px;">
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Chart</h5>
+                  <div id="center" style="height:400px; width: 600px;">
+                    <canvas id="showWorstReturnsChart" width="600" height="300"></canvas>
+                 </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Results</h5>
+                  <div class="card-body" id='showWorstReturns'>
+                </div>  
+                </div>
+              </div>
+            </div>
+        </div>
 
         <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-        <h2>Worst Returns Function</h2>
+
         <div class="input-group input-group-sm mb-3">
         <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Ticker</span>
@@ -813,14 +889,26 @@ th, td, p, input, h3 {
 
 
 <!-- https://getbootstrap.com/docs/4.0/components/buttons/ -->
-<h2>Annualized Sharpe Ratio Function</h2>
-
-<div class="card">
-    <div id="center" style="height:400px; width: 600px;">
-        <canvas id="showSharpeChart" width="600" height="300"></canvas>
-     </div>
-    <div class="card-body" id='showSharpe'>
-    </div>  
+<div class="row" style="margin:18px;">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Chart</h5>
+          <div id="center" style="height:400px; width: 600px;">
+            <canvas id="showSharpeChart" width="600" height="300"></canvas>
+         </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Results</h5>
+          <div class="card-body" id='showSharpe'>
+        </div>  
+        </div>
+      </div>
+    </div>
 </div>
 
 <div class="input-group input-group-sm mb-3">
@@ -860,8 +948,7 @@ th, td, p, input, h3 {
     
     </div>
     <!-- Comparisons -->
-    <div class="tab-pane" id="compare" role="tabpanel" aria-labelledby="comparison-tab">...
-        Comparison
+    <div class="tab-pane" id="compare" role="tabpanel" aria-labelledby="comparison-tab">
 
     
     </div>
