@@ -107,11 +107,16 @@ $CurrentTickerData = {};
                 tableFromJson(data, destination);
                 var labels = [];
                 var datapoint = [];
+                
+                var keys = Object.keys(data[0]);
+                console.log(keys[0]); //or console.log( keys.join(",") )
+
                 for(var x=0;x<data.length;x++){
-                    labels.push(data[x]["Date"]);
-                    datapoint.push(data[x]["Percent Change"]);
+                    labels.push(data[x][keys[0]]);
+                    datapoint.push(data[x][keys[1]]);
                 }
                 console.log("desti"+destination);
+                
 
                     var ctx = document.getElementById(destination+'Chart').getContext('2d');
 
@@ -468,32 +473,45 @@ th, td, p, input, h3 {
 
 <!-- Tab panes -->
 
-<div class="tab-content">
+<div class="tab-content text-center ">
     <!-- Home -->
     <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="class">
-    
-        <h4 style="color:black">To begin, enter your Stonk Symbol here:</h4>
-        <div class="class-body">
-            <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                How it works:
-              </a>
-          
-            <div class="collapse" id="collapseExample">
-              <div class="card card-body">
-                Enter your Stonks to see how they did.
-          
-                Then mortgage your house and YOLO call options.
-              </div>
+        <div class="card align-middle .flex-row">
+            <div class="card-header">
+                <h4 style="color:black">To begin, enter your Stonk Symbol here:</h4>
             </div>
-        </div>    
-        <div class="card-body input-group input-group-sm mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text">Symbol</span>
+            <div class="card-body align-middle ">
+                <div class="class-body">
+                    <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        How it works:
+                      </a>
+                  
+                    <div class="collapse" id="collapseExample">
+                      <div class="card card-body">
+                        Enter your Stonks to see how they did.
+                  
+                        Then mortgage your house and YOLO call options.
+                      </div>
+                    </div>
+                </div> 
+                <div class="card-body input-group input-group-sm">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text">Symbol</span>
+                    </div>
+                    <input type="text" class='stonkticker' class="form-control" value="AAPL">    
+                  </div>     
+                  <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>   
+              
+              
+            </div>
+            
           </div>
-          <input type="text" class='stonkticker' class="form-control" value="AAPL">    
-        </div>     
-        <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>
+
+        <div class="text-center">
+         
+        
+         
+        
     </div>
     </div>
     <!-- Greater Than -->
