@@ -167,7 +167,7 @@ def top_N_returns(ticker, interval, number_of_returns, start_date, end_date):
     df = df.sort_index()
     df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
     df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_index() #sort_values(["returns"], ascending=False)
+    df_sub = df_sub.sort_values(['returns'], ascending=False) #sort_values(["returns"], ascending=False)
     df_sub = df_sub[["returns"]].head(number_of_returns).to_dict() # series of the returns 
     final_dict = df_sub['returns']
     a = {}
@@ -198,7 +198,7 @@ def bottom_N_returns(ticker, interval, number_of_returns, start_date, end_date):
     df = df.sort_index()
     df["returns"] = df["5. adjusted close"].pct_change(periods=interval)*100
     df_sub = df.loc[start_date:end_date]  # slice of date frame
-    df_sub = df_sub.sort_index() #sort_values(["returns"])
+    df_sub = df_sub.sort_values(['returns']) #sort_values(["returns"])
     df_sub = df_sub[["returns"]].head(number_of_returns).to_dict()  # series of the returns
     final_dict = df_sub['returns']
     a = {}
