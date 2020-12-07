@@ -403,8 +403,7 @@ $(function(ready){
 
 <style>
 body {font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif , sans-serif;}
-     {
-         background: url('https://i.ytimg.com/vi/if-2M3K1tqk/maxresdefault.jpg');} /*no-repeat fixed center; -->*/
+      /*no-repeat fixed center; -->*/
 
 
 
@@ -506,6 +505,7 @@ th, td, p, input, h3 {
       </div>
     </div>
   </div>
+  
 
 <!-- Tab panes -->
 
@@ -515,8 +515,9 @@ th, td, p, input, h3 {
         
         <div class="row card align-middle .flex-row .v-center">
             <div class="card-header">
-                <h4 style="color:black">To begin, enter your Stonk Symbol here:</h4>
+                <h4 style="color:black">To Begin, Enter Your Stonk Symbol Below:</h4>
             </div>
+            <img src="https://i.ytimg.com/vi/if-2M3K1tqk/maxresdefault.jpg" class="rounded mx-auto d-block" alt="Responsive image" style="width:50%">
             <div class="card-body align-middle .d-inline-flex" >
                 <div class="class-body">
                     <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
@@ -532,10 +533,10 @@ th, td, p, input, h3 {
                     </div>
                 </div> 
                 <div class="card-body input-group input-group-sm">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">Symbol</span>
-                    </div>
-                    <input type="text" id="stonkticker" class="ticker form-control" value="AAPL">    
+                    <div class="input-group-prepend col-xs-4">
+                      <span class="input-group-text" >Symbol</span>
+                    </div >
+                    <input type="text" id="stonkticker" class="ticker form-control" aria-label="Small" value="AAPL">    
                   </div>     
                   <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>   
               
