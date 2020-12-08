@@ -34,13 +34,16 @@ $(function(ready){
     $('.stonkticker').val($StockSymbol);
     console.log($StockSymbol);
   });
+
 });
 
  
     function submitSymbol(){
       $('.stonkticker').val($StockSymbol);
-    //  populateTabs();
-
+      alert("Your data has loaded. Check out other tabs");
+      //populateTabs();
+    //  $('.tab-content div:nth-child(2)').tab('show');
+    //  $('.tab-content div:first-child').removeClass('active');
     }
 
     //saves all prior searches to cache, so we can compare
@@ -50,6 +53,7 @@ $(function(ready){
 
     function populateTabs(){
         //populate every single tab baby
+
         submit("greaterthan");
         submit("lessthan");
         submit("margin");
@@ -474,9 +478,6 @@ th, td, p, input, h3 {
       <li class="nav-item">
         <a class="nav-link" id="sharpe-tab" data-toggle="tab" href="#sharpe" role="tab" aria-controls="sharpe" aria-selected="false">Sharpe</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" id="sharpe-tab" data-toggle="tab" href="#compare" role="tab" aria-controls="compare" aria-selected="false">Comparison</a>
-      </li>
   </ul>
     </div>
 </div>
@@ -539,7 +540,7 @@ th, td, p, input, h3 {
                     </div >
                     <input type="text" id="stonkticker" class="stonkticker form-control" aria-label="Small" value="AAPL">    
                   </div>     
-                  <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()">Find Stonks</button>   
+                  <button id="submit" type="button" class="btn btn-primary" onClick="submitSymbol()" href="#greaterthan" >Find Stonks</button>   
               
               
             </div>
