@@ -38,7 +38,8 @@ $(function(ready){
 
  
     function submitSymbol(){
-      populateTabs();
+      $('.stonkticker').val($StockSymbol);
+    //  populateTabs();
 
     }
 
@@ -48,7 +49,6 @@ $(function(ready){
     }
 
     function populateTabs(){
-      $('.stonkticker').val($StockSymbol);
         //populate every single tab baby
         submit("greaterthan");
         submit("lessthan");
